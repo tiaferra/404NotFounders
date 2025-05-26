@@ -16,14 +16,24 @@
     </header>
 
  
-    <div class="search-box">
-      
-    </div>
+   <main>
+    <div class="box">Riquadro 1<br>
+        <p>qui ci va la barra di ricerca</p>
 
- 
-    <div class="content">
-      
     </div>
+    <div class="box grande">Riquadro 2
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Chi siamo</a></li>
+            <li><a href="#">Contatti</a></li>
+        </ul>
+    </nav>
+
+
+    </div>
+    <div class="box">Riquadro 3</div>
+    </main>
 
     <nav class="main-nav">
         <a href="#" class="nav-button">Home</a>

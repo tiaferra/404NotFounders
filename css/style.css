@@ -85,3 +85,27 @@ body {
 .main-nav .nav-button {
     margin: 0 0.5rem;
 }
+
+.main {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-around; /* o space-between o center */
+   align-items: flex-start;       /* o center per centrare verticalmente */
+  padding: 20px;
+  height: 100vh;
+  background-color: #103c22;
+}
+
+    .box {
+        flex: 1;
+        height: 80%;
+      background-color: #4caf50;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .grande{
+        flex: 3;
+    }
