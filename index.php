@@ -1,0 +1,22 @@
+<html>
+    <div>
+        <header>header</header>
+    </div>
+    <body>
+        <div>
+            <h1>filtro ricerca</h1>
+        </div>
+        <div>
+            <h1>
+                risultati
+            </h1>
+        </div>
+        <div>
+            <h1>nav</h1>
+            <input>
+        </div>
+        </body>
+    <div>
+        <footer>footer</footer>
+    </div>
+</html>
