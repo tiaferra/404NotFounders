@@ -67,7 +67,12 @@
 
          <div class="box sfondo grande">
             <div class="box grande">Contenuto<br/>
-                <!-- Tabella per Opzione 1 -->
+
+                <table id="tabellaRegione" class="tabella" style="display:none;"></table>
+                <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
+                <table id="tabellaLibro" class="tabella" style="display:none;"></table>
+
+                <!-- Tabella per Opzione 1 
                     <div id="tabella1" class="tabella" style="display: none;">
                     <h3>Tabella Regione</h3>
                     <table>
@@ -81,7 +86,7 @@
                     </table>
                     </div>
 
-                    <!-- Tabella per Opzione 2 -->
+                     Tabella per Opzione 2 
                     <div id="tabella2" class="tabella" style="display: none;">
                     <h3>Tabella Ricetta</h3>
                     <table>
@@ -95,7 +100,7 @@
                     </table>
                     </div>
 
-                    <!-- Tabella per Opzione 3 -->
+                     Tabella per Opzione 3 
                     <div id="tabella3" class="tabella" style="display: none;">
                     <h3>Tabella Libro</h3>
                     <table>
@@ -107,7 +112,7 @@
                         <tr><td>9780987654321</td><td>Cucina Italiana</td><td>2022</td></tr>
                         </tbody>
                     </table>
-                    </div>
+                    </div>-->
 
             </div>
          </div>
