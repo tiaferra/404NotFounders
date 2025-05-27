@@ -120,10 +120,65 @@ body {
     background-color: var(--verde-medio);
 }
 
-/*!! NON APPARE idk why, ma è la classe per il footer*/
+/* la classe per il footer*/
 .footer{
     background-color: var(--verde-scuro);
     color: var(--bianco);
     padding: 1rem;
     text-align: center;
+}
+
+/*modifica per il menù a pallini*/
+input[type="radio"] {
+  accent-color: var(--verde-chiaro); /* Cambia il colore del pallino selezionato */
+  margin-right: 8px;     /* Spazio tra il pallino e l'etichetta */
+}
+
+label {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: var(--verde-scurissimo);
+}
+
+.options-group {
+  margin-top: 10px;
+  display: none; /* nascondi inizialmente */
+}
+
+.checkbox-label {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px;
+  border: 2px solid #2ecc71;
+  border-radius: 5px;
+  cursor: pointer;
+    }
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"]:checked + .checkbox-label {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.tabella table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: white;
+  color: #103c22;
+}
+
+.tabella th,
+.tabella td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.tabella th {
+  background-color: var(--verde-chiaro);
+  color: white;
 }
