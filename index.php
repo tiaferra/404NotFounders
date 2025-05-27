@@ -72,48 +72,6 @@
                 <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
                 <table id="tabellaLibro" class="tabella" style="display:none;"></table>
 
-                <!-- Tabella per Opzione 1 
-                    <div id="tabella1" class="tabella" style="display: none;">
-                    <h3>Tabella Regione</h3>
-                    <table>
-                        <thead>
-                        <tr><th>Cod</th><th>Nome</th></tr>
-                        </thead>
-                        <tbody>
-                        <tr><td>01</td><td>Lombardia</td></tr>
-                        <tr><td>02</td><td>Veneto</td></tr>
-                        </tbody>
-                    </table>
-                    </div>
-
-                     Tabella per Opzione 2 
-                    <div id="tabella2" class="tabella" style="display: none;">
-                    <h3>Tabella Ricetta</h3>
-                    <table>
-                        <thead>
-                        <tr><th>Numero</th><th>Tipo</th><th>Titolo</th></tr>
-                        </thead>
-                        <tbody>
-                        <tr><td>001</td><td>Primo</td><td>Lasagne</td></tr>
-                        <tr><td>002</td><td>Dolce</td><td>Tiramisu</td></tr>
-                        </tbody>
-                    </table>
-                    </div>
-
-                     Tabella per Opzione 3 
-                    <div id="tabella3" class="tabella" style="display: none;">
-                    <h3>Tabella Libro</h3>
-                    <table>
-                        <thead>
-                        <tr><th>CodISBN</th><th>Titolo</th><th>Anno</th></tr>
-                        </thead>
-                        <tbody>
-                        <tr><td>9781234567890</td><td>Ricette Facili</td><td>2020</td></tr>
-                        <tr><td>9780987654321</td><td>Cucina Italiana</td><td>2022</td></tr>
-                        </tbody>
-                    </table>
-                    </div>-->
-
             </div>
          </div>
 
