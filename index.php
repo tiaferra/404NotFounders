@@ -16,7 +16,7 @@
     </header>
 
  
-   <main>
+   <main class= "main">
     <div class="box">Riquadro 1<br>
         <p>qui ci va la barra di ricerca</p>
 
@@ -34,15 +34,16 @@
     </div>
     <div class="box">Riquadro 3</div>
     </main>
-
+<!--
     <nav class="main-nav">
         <a href="#" class="nav-button">Home</a>
         <a href="#" class="nav-button">Libri</a>
         <a href="#" class="nav-button">Ricette</a>
     </nav>
-
+-->
     
     <footer class="footer">
+        <h4>footer</h4>
     </footer>
 </body>
 </html>

@@ -4,6 +4,7 @@
     --verde-medio: #27ae60;
     --verde-scuro: #1e8449;
     --bianco: #ffffff;
+    --verde-scurissimo: #103c22;
 }
 
 /* Sfondo con gradiente verde */
@@ -43,8 +44,11 @@ body {
     letter-spacing: 1px;
 }
 
+/*classe della sezione nav*/
+/*sarebbe bello anche poterlo metterlo nell'header magari, ma lo vediamo quando siamo insieme*/
 .nav {
     display: flex;
+    flex-direction: column;
     gap: 1.5rem;
 }
 
@@ -75,7 +79,7 @@ body {
     }
 }
 
-.main-nav {
+/*.main-nav {
     background-color: var(--verde-scuro);
     padding: 1rem;
     text-align: center;
@@ -84,28 +88,42 @@ body {
 
 .main-nav .nav-button {
     margin: 0 0.5rem;
-}
+}*/
 
+/*è il contenitore dei 3 riquadri*/
 .main {
     display: flex;
     gap: 1rem;
     justify-content: space-around; /* o space-between o center */
-   align-items: flex-start;       /* o center per centrare verticalmente */
-  padding: 20px;
-  height: 100vh;
-  background-color: #103c22;
+    align-items: flex-start;       /* o center per centrare verticalmente */
+    padding: 20px;
+    height: 100vh;
+    background-color: var(--verde-scurissimo);
+}
+/*classe che definisce i nostri 3 riquadri principali*/
+.box {
+    flex: 1;
+    height: 90%;
+    background-color: var(--verde-chiaro);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+ }
+
+ /*per definire la dimensione del riquadro centrale*/
+.grande{
+    flex: 3;
+}
+/*l'ho creato per dare un effetto di margine ai riquadri*/
+.sfondo{
+    background-color: var(--verde-medio);
 }
 
-    .box {
-        flex: 1;
-        height: 80%;
-      background-color: #4caf50;
-      color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .grande{
-        flex: 3;
-    }
+/*!! NON APPARE idk why, ma è la classe per il footer*/
+.footer{
+    background-color: var(--verde-scuro);
+    color: var(--bianco);
+    padding: 1rem;
+    text-align: center;
+}
