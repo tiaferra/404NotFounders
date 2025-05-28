@@ -29,44 +29,44 @@ document.querySelectorAll('input[name="scelta"]').forEach(radio => {
 
 // Funzione generica per mostrare i dati in una tabella
 function mostraTabella(data, colonne, idTabella) {
-  // Nasconde tutte le tabelle prima di mostrare quella attuale
-  const tabelle = document.querySelectorAll('table');
-  tabelle.forEach(tabella => tabella.style.display = 'none');
+    const tabella = document.getElementById(idTabella);
+    tabella.innerHTML = "";
 
-  const tabella = document.getElementById(idTabella);
-  tabella.innerHTML = "";
-
-  // Intestazione
-  const headerRow = document.createElement("tr");
-  colonne.forEach(col => {
-    const th = document.createElement("th");
-    th.textContent = col;
-    headerRow.appendChild(th);
-  });
-  tabella.appendChild(headerRow);
-
-  // Dati
-  data.forEach(riga => {
-    const row = document.createElement("tr");
+    // Intestazione
+    const headerRow = document.createElement("tr");
     colonne.forEach(col => {
-      const cell = document.createElement("td");
-      cell.textContent = riga[col];
-      row.appendChild(cell);
+        const th = document.createElement("th");
+        th.textContent = col;
+        headerRow.appendChild(th);
     });
-    tabella.appendChild(row);
-  });
+    tabella.appendChild(headerRow);
 
-  tabella.style.display = "table";
+    // Dati
+    data.forEach(riga => {
+        const row = document.createElement("tr");
+        colonne.forEach(col => {
+            const cell = document.createElement("td");
+            cell.textContent = riga[col];
+            row.appendChild(cell);
+        });
+        tabella.appendChild(row);
+    });
+
+    tabella.style.display = "table";
 }
 
-// Carica Regione
 function caricaTabellaRegione() {
-  fetch('php/get_regioni.php')
-    .then(res => res.json())
-    .then(data => {
-      mostraTabella(data, ['cod', 'nome'], 'tabellaRegione');
-    })
-    .catch(err => console.error("Errore caricamento Regione:", err));
+    if (regioniData.length === 0) {
+        fetch('php/get_regioni.php')
+            .then(res => res.json())
+            .then(data => {
+                regioniData = data; // Salva i dati
+                mostraTabella(data, ['cod', 'nome'], 'tabellaRegione');
+            })
+            .catch(err => console.error("Errore caricamento Regione:", err));
+    } else {
+        mostraTabella(regioniData, ['cod', 'nome'], 'tabellaRegione');
+    }
 }
 
 // Carica Ricette
@@ -88,3 +88,15 @@ function caricaTabellaLibro() {
     })
     .catch(err => console.error("Errore caricamento Libri:", err));
 }
+// Variabile globale per memorizzare i dati delle regioni
+let regioniData = [];
+
+// Funzione per filtrare le regioni
+function filtraRegioni() {
+    const filtro = document.getElementById('filtroRegione').value.toLowerCase();
+    const regioniFiltrate = regioniData.filter(regione => 
+        regione.nome.toLowerCase().includes(filtro)
+    );
+    mostraTabella(regioniFiltrate, ['cod', 'nome'], 'tabellaRegione');
+}
+

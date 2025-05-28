@@ -38,11 +38,8 @@
                 </form>
 
                 <div id="opzioni1" class="options-group">
-                    <h3>Opzioni per Pallino 1:</h3>
-                    <input type="checkbox" id="opt1a"><label for="opt1a" class="checkbox-label">Opzione 1A</label>
-                    <input type="checkbox" id="opt1b"><label for="opt1b" class="checkbox-label">Opzione 1B</label>
-                    <input type="checkbox" id="opt1c"><label for="opt1c" class="checkbox-label">Opzione 1C</label>
-                    <input type="checkbox" id="opt1d"><label for="opt1d" class="checkbox-label">Opzione 1D</label>
+                    <h3>Filtra per nome:</h3>
+                    <input type="text" id="filtroRegione" placeholder="Cerca regione..." oninput="filtraRegioni()">
                 </div>
 
                 <div id="opzioni2" class="options-group">
@@ -66,12 +63,13 @@
         </div>
 
          <div class="box sfondo grande">
-            <div class="box grande">Contenuto<br/>
-
-                <table id="tabellaRegione" class="tabella" style="display:none;"></table>
-                <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
-                <table id="tabellaLibro" class="tabella" style="display:none;"></table>
-
+            <div class="box grande">
+                Contenuto<br/>
+                <div class="scroll-container">
+                    <table id="tabellaRegione" class="tabella" style="display:none;"></table>
+                    <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
+                    <table id="tabellaLibro" class="tabella" style="display:none;"></table>
+                </div>
             </div>
          </div>
 
