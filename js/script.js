@@ -1,15 +1,25 @@
+// Variabile globale per memorizzare i dati delle regioni
+let regioniData = [];
+let ricetteData = [];
 // Mostra il gruppo di opzioni e nasconde le altre
 function mostraOpzioni(id) {
-  const gruppi = document.querySelectorAll('.options-group');
-  gruppi.forEach(gruppo => {
-    gruppo.style.display = 'none';
-  });
+    const gruppi = document.querySelectorAll('.options-group');
+    gruppi.forEach(gruppo => {
+        gruppo.style.display = 'none';
+    });
 
-  document.getElementById(id).style.display = 'block';
+    document.getElementById(id).style.display = 'block';
 
-  // Nasconde tutte le tabelle quando si cambia opzione
-  const tabelle = document.querySelectorAll('table');
-  tabelle.forEach(tabella => tabella.style.display = 'none');
+    const tabelle = document.querySelectorAll('table');
+    tabelle.forEach(tabella => tabella.style.display = 'none');
+
+    if (id === 'opzioni1') {
+        caricaTabellaRegione();
+    } else if (id === 'opzioni2') {
+        caricaTabellaRicetta();
+    } else if (id === 'opzioni3') {
+        caricaTabellaLibro();
+    }
 }
 
 // Gestisce la selezione dei radio
@@ -71,12 +81,19 @@ function caricaTabellaRegione() {
 
 // Carica Ricette
 function caricaTabellaRicetta() {
-  fetch('php/get_ricette.php')
-    .then(res => res.json())
-    .then(data => {
-      mostraTabella(data, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
-    })
-    .catch(err => console.error("Errore caricamento Ricette:", err));
+    if (ricetteData.length === 0) {
+        // MODIFICA QUI: usa il nuovo endpoint che include le regioni
+        fetch('php/get_ricette_con_regioni.php')
+            .then(res => res.json())
+            .then(data => {
+                ricetteData = data;
+                mostraTabella(data, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
+                caricaRegioniPerRicette(); // Carica le regioni per il dropdown
+            })
+            .catch(err => console.error("Errore caricamento Ricette:", err));
+    } else {
+        mostraTabella(ricetteData, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
+    }
 }
 
 // Carica Libri
@@ -88,8 +105,7 @@ function caricaTabellaLibro() {
     })
     .catch(err => console.error("Errore caricamento Libri:", err));
 }
-// Variabile globale per memorizzare i dati delle regioni
-let regioniData = [];
+
 
 // Funzione per filtrare le regioni
 function filtraRegioni() {
@@ -100,3 +116,52 @@ function filtraRegioni() {
     mostraTabella(regioniFiltrate, ['cod', 'nome'], 'tabellaRegione');
 }
 
+function caricaRegioniPerRicette() {
+    if (regioniData.length === 0) {
+        fetch('php/get_regioni.php')
+            .then(res => res.json())
+            .then(data => {
+                regioniData = data;
+                popolaDropdownRegioni();
+            })
+            .catch(err => console.error("Errore caricamento Regioni:", err));
+    } else {
+        popolaDropdownRegioni();
+    }
+}
+
+function popolaDropdownRegioni() {
+    const select = document.getElementById('filtroRegioneRicetta');
+    
+    // Mantieni l'opzione "Tutte le regioni"
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+    
+    regioniData.forEach(regione => {
+        const option = document.createElement('option');
+        option.value = regione.nome;
+        option.textContent = regione.nome;
+        select.appendChild(option);
+    });
+}
+
+// Funzione di filtraggio per le ricette
+function filtraRicette() {
+    const titolo = document.getElementById('filtroTitolo').value.toLowerCase();
+    const tipo = document.getElementById('filtroTipo').value;
+    const regione = document.getElementById('filtroRegioneRicetta').value;
+
+    const ricetteFiltrate = ricetteData.filter(ricetta => {
+        const matchTitolo = ricetta.titolo.toLowerCase().includes(titolo);
+        const matchTipo = tipo === '' || ricetta.tipo === tipo;
+        
+        // MODIFICA QUI: usa il campo regioni
+        const matchRegione = regione === '' || 
+                             (ricetta.regioni && ricetta.regioni.toLowerCase().includes(regione.toLowerCase()));
+        
+        return matchTitolo && matchTipo && matchRegione;
+    });
+
+    mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
+}

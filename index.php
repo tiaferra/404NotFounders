@@ -43,12 +43,33 @@
                 </div>
 
                 <div id="opzioni2" class="options-group">
-                    <h3>Opzioni per Pallino 2:</h3>
-                    <input type="checkbox" id="opt2a"><label for="opt2a" class="checkbox-label">Opzione 2A</label>
-                    <input type="checkbox" id="opt2b"><label for="opt2b" class="checkbox-label">Opzione 2B</label>
-                    <input type="checkbox" id="opt2c"><label for="opt2c" class="checkbox-label">Opzione 2C</label>
-                    <input type="checkbox" id="opt2d"><label for="opt2d" class="checkbox-label">Opzione 2D</label>
+                <h3>Filtri:</h3>
+                
+                <div class="filtro-riga">
+                    <label for="filtroTitolo">Titolo:</label>
+                    <input type="text" id="filtroTitolo" placeholder="Cerca titolo..." oninput="filtraRicette()">
                 </div>
+                
+                <div class="filtro-riga">
+                    <label for="filtroTipo">Tipo:</label>
+                    <select id="filtroTipo" onchange="filtraRicette()">
+                        <option value="">Tutti i tipi</option>
+                        <option value="antipasto">Antipasto</option>
+                        <option value="primo">Primo</option>
+                        <option value="secondo">Secondo</option>
+                        <option value="contorno">Contorno</option>
+                        <option value="dessert">Dessert</option>
+                    </select>
+                </div>
+                
+                <div class="filtro-riga">
+                    <label for="filtroRegioneRicetta">Regione:</label>
+                    <select id="filtroRegioneRicetta" onchange="filtraRicette()">
+                        <option value="">Tutte le regioni</option>
+                        <!-- Le opzioni verranno caricate dinamicamente -->
+                    </select>
+                </div>
+            </div>
 
                 <div id="opzioni3" class="options-group">
                     <h3>Opzioni per Pallino 3:</h3>
