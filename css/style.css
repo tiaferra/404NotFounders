@@ -210,3 +210,16 @@
     background-position: right 1rem center;
     background-size: 1em;
 }
+
+/* Per la riga con due input (min e max) */
+.filtro-riga input[type="number"] {
+    width: 70px; /* Larghezza fissa per i campi numerici */
+    margin-right: 10px;
+}
+
+/* Allineamento delle label per i campi min e max */
+.filtro-riga label[for="filtroMinLibri"],
+.filtro-riga label[for="filtroMaxLibri"] {
+    min-width: auto;
+    margin-right: 5px;
+}

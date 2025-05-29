@@ -1,6 +1,7 @@
 // Variabile globale per memorizzare i dati delle regioni
 let regioniData = [];
 let ricetteData = [];
+let libriData = [];
 // Mostra il gruppo di opzioni e nasconde le altre
 function mostraOpzioni(id) {
     const gruppi = document.querySelectorAll('.options-group');
@@ -98,31 +99,18 @@ function caricaTabellaRegione() {
 
 // Carica Ricette
 function caricaTabellaRicetta() {
-  // Assicurati di caricare le regioni per il dropdown
   caricaRegioniPerRicette();
+  caricaLibriPerRicette(); // Carica i libri per il dropdown
   
   if (ricetteData.length === 0) {
     fetch('php/get_ricette.php')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Errore nella richiesta');
-        }
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => {
-        console.log("Dati ricevuti:", data); // Debug
         ricetteData = data;
         mostraTabella(data, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
       })
-      .catch(err => {
-        console.error("Errore caricamento Ricette:", err);
-        // Mostra un messaggio di errore
-        const tabella = document.getElementById('tabellaRicetta');
-        tabella.innerHTML = "<tr><td>Errore nel caricamento dei dati</td></tr>";
-        tabella.style.display = "table";
-      });
+      .catch(err => console.error("Errore caricamento Ricette:", err));
   } else {
-    console.log("Usa dati esistenti:", ricetteData); // Debug
     mostraTabella(ricetteData, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
   }
 }
@@ -179,21 +167,55 @@ function popolaDropdownRegioni() {
         select.appendChild(option);
     });
 }
+// Funzione per caricare i libri
+function caricaLibriPerRicette() {
+    if (libriData.length > 0) {
+        popolaDropdownLibri();
+        return;
+    }
 
+    fetch('php/get_libri.php')
+        .then(res => res.json())
+        .then(data => {
+            libriData = data;
+            popolaDropdownLibri();
+        })
+        .catch(err => console.error("Errore caricamento Libri:", err));
+}
+// Popola il dropdown dei libri
+function popolaDropdownLibri() {
+    const select = document.getElementById('filtroLibro');
+    // Mantieni l'opzione "Tutti i libri"
+    while (select.options.length > 1) {
+        select.remove(1);
+    }
+
+    libriData.forEach(libro => {
+        const option = document.createElement('option');
+        option.value = libro.titolo;
+        option.textContent = libro.titolo;
+        select.appendChild(option);
+    });
+}
 // Funzione di filtraggio per le ricette
 function filtraRicette() {
     const titolo = document.getElementById('filtroTitolo').value.toLowerCase();
     const tipo = document.getElementById('filtroTipo').value;
     const regione = document.getElementById('filtroRegioneRicetta').value;
+    const minLibri = parseInt(document.getElementById('filtroMinLibri').value) || 0;
+    const maxLibri = parseInt(document.getElementById('filtroMaxLibri').value) || Infinity;
+    const libroSelezionato = document.getElementById('filtroLibro').value;
 
     const ricetteFiltrate = ricetteData.filter(ricetta => {
         const matchTitolo = ricetta.titolo.toLowerCase().includes(titolo);
         const matchTipo = tipo === '' || ricetta.tipo === tipo;
-        
         const matchRegione = regione === '' || 
-         (ricetta.regioni && ricetta.regioni.toLowerCase().includes(regione.toLowerCase()));
+                            (ricetta.regioni && ricetta.regioni.toLowerCase().includes(regione.toLowerCase()));
+        const matchNumeroLibri = ricetta.numeroLibri >= minLibri && ricetta.numeroLibri <= maxLibri;
+        const matchLibro = libroSelezionato === '' || 
+                          (ricetta.titoliLibri && ricetta.titoliLibri.toLowerCase().includes(libroSelezionato.toLowerCase()));
 
-        return matchTitolo && matchTipo && matchRegione;
+        return matchTitolo && matchTipo && matchRegione && matchNumeroLibri && matchLibro;
     });
 
    mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');

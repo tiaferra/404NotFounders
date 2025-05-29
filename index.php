@@ -69,6 +69,23 @@
                         <!-- Le opzioni verranno caricate dinamicamente -->
                     </select>
                 </div>
+
+
+                <div class="filtro-riga">
+                    <label for="filtroMinLibri">Min Libri:</label>
+                    <input type="number" id="filtroMinLibri" min="0" placeholder="Min" oninput="filtraRicette()">
+                    
+                    <label for="filtroMaxLibri">Max Libri:</label>
+                    <input type="number" id="filtroMaxLibri" min="0" placeholder="Max" oninput="filtraRicette()">
+                </div>
+                
+                <div class="filtro-riga">
+                    <label for="filtroLibro">Libro:</label>
+                    <select id="filtroLibro" onchange="filtraRicette()">
+                        <option value="">Tutti i libri</option>
+                        <!-- Opzioni caricate dinamicamente -->
+                    </select>
+                </div>
             </div>
 
                 <div id="opzioni3" class="options-group">
