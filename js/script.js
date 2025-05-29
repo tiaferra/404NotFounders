@@ -122,10 +122,12 @@ function caricaTabellaLibro() {
       .then(res => res.json())
       .then(data => {
         libriData = data;
+        popolaDropdownAnni(); // Popola i dropdown degli anni
         mostraTabella(data, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
       })
       .catch(err => console.error("Errore caricamento Libri:", err));
   } else {
+    popolaDropdownAnni(); // Popola i dropdown anche se i dati sono già in memoria
     mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
   }
 }
@@ -229,8 +231,13 @@ function filtraRicette() {
 function filtraLibri() {
     const isbn = document.getElementById('filtroISBN').value.toLowerCase();
     const titolo = document.getElementById('filtroTitoloLibro').value.toLowerCase();
-    const minAnno = parseInt(document.getElementById('filtroMinAnno').value) || 0;
-    const maxAnno = parseInt(document.getElementById('filtroMaxAnno').value) || Infinity;
+    
+    // Gestione dropdown anni
+    const minAnnoSelect = document.getElementById('filtroMinAnno');
+    const minAnno = minAnnoSelect.value ? parseInt(minAnnoSelect.value) : 0;
+    const maxAnnoSelect = document.getElementById('filtroMaxAnno');
+    const maxAnno = maxAnnoSelect.value ? parseInt(maxAnnoSelect.value) : Infinity;
+    
     const minPagine = parseInt(document.getElementById('filtroMinPagine').value) || 0;
     const maxPagine = parseInt(document.getElementById('filtroMaxPagine').value) || Infinity;
     const minRicette = parseInt(document.getElementById('filtroMinRicette').value) || 0;
@@ -239,7 +246,8 @@ function filtraLibri() {
     const libriFiltrati = libriData.filter(libro => {
         const matchISBN = isbn === '' || (libro.codISBN && libro.codISBN.toLowerCase().includes(isbn));
         const matchTitolo = titolo === '' || (libro.titolo && libro.titolo.toLowerCase().includes(titolo));
-        const matchAnno = (libro.anno >= minAnno) && (libro.anno <= maxAnno);
+        const matchAnno = (minAnno === 0 || libro.anno >= minAnno) && 
+                         (maxAnno === Infinity || libro.anno <= maxAnno);
         const matchPagine = (libro.numeroPagine >= minPagine) && (libro.numeroPagine <= maxPagine);
         const matchRicette = (libro.numeroRicette >= minRicette) && (libro.numeroRicette <= maxRicette);
 
@@ -247,4 +255,66 @@ function filtraLibri() {
     });
 
     mostraTabella(libriFiltrati, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+}
+
+// Funzione per estrarre gli anni unici dai dati dei libri
+function estraiAnniUnici(libri) {
+    const anni = new Set();
+    libri.forEach(libro => {
+        if (libro.anno) {
+            anni.add(libro.anno);
+        }
+    });
+    return Array.from(anni).sort((a, b) => b - a); // Ordina dal più recente
+}
+
+// Popola i dropdown degli anni
+function popolaDropdownAnni() {
+    const anni = estraiAnniUnici(libriData);
+    const minAnnoSelect = document.getElementById('filtroMinAnno');
+    const maxAnnoSelect = document.getElementById('filtroMaxAnno');
+    
+    // Popola minAnnoSelect
+    anni.forEach(anno => {
+        const option = document.createElement('option');
+        option.value = anno;
+        option.textContent = anno;
+        minAnnoSelect.appendChild(option);
+    });
+    
+    // Popola maxAnnoSelect (stessi valori)
+    anni.forEach(anno => {
+        const option = document.createElement('option');
+        option.value = anno;
+        option.textContent = anno;
+        maxAnnoSelect.appendChild(option);
+    });
+}
+
+// Funzione per resettare i filtri
+function resettaFiltriLibri() {
+    document.getElementById('filtroISBN').value = '';
+    document.getElementById('filtroTitoloLibro').value = '';
+    document.getElementById('filtroMinAnno').value = '';
+    document.getElementById('filtroMaxAnno').value = '';
+    document.getElementById('filtroMinPagine').value = '';
+    document.getElementById('filtroMaxPagine').value = '';
+    document.getElementById('filtroMinRicette').value = '';
+    document.getElementById('filtroMaxRicette').value = '';
+    
+    filtraLibri(); // Applica il reset
+}
+
+// Funzione per resettare i filtri delle ricette
+function resettaFiltriRicette() {
+    // Resetta tutti i campi di input
+    document.getElementById('filtroTitolo').value = '';
+    document.getElementById('filtroTipo').value = '';
+    document.getElementById('filtroRegioneRicetta').value = '';
+    document.getElementById('filtroMinLibri').value = '';
+    document.getElementById('filtroMaxLibri').value = '';
+    document.getElementById('filtroLibro').value = '';
+    
+    // Ri-applica il filtro (mostra tutti i risultati)
+    filtraRicette();
 }

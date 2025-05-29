@@ -86,6 +86,12 @@
                         <!-- Opzioni caricate dinamicamente -->
                     </select>
                 </div>
+
+                <div class="filtro-riga">
+                    <button id="resetFiltri" class="nav-button" onclick="resettaFiltriRicette()">
+                        Resetta Filtri
+                    </button>
+                </div>
             </div>
 
                 <div id="opzioni3" class="options-group">
@@ -102,12 +108,17 @@
                     </div>
                     
                     <div class="filtro-riga">
-                        <label>Anno:</label>
-                        <div class="range-group">
-                            <input type="number" id="filtroMinAnno" min="0" placeholder="Min" oninput="filtraLibri()">
-                            <span>-</span>
-                            <input type="number" id="filtroMaxAnno" min="0" placeholder="Max" oninput="filtraLibri()">
-                        </div>
+                        <label for="filtroMinAnno">Anno Min:</label>
+                        <select id="filtroMinAnno" onchange="filtraLibri()">
+                            <option value="">Tutti</option>
+                            <!-- Gli anni verranno caricati dinamicamente -->
+                        </select>
+                        
+                        <label for="filtroMaxAnno">Anno Max:</label>
+                        <select id="filtroMaxAnno" onchange="filtraLibri()">
+                            <option value="">Tutti</option>
+                            <!-- Gli anni verranno caricati dinamicamente -->
+                        </select>
                     </div>
 
                     <div class="filtro-riga">
@@ -126,6 +137,12 @@
                             <span>-</span>
                             <input type="number" id="filtroMaxRicette" min="0" placeholder="Max" oninput="filtraLibri()">
                         </div>
+                    </div>
+
+                    <div class="filtro-riga">
+                        <button id="resetFiltri" class="nav-button" onclick="resettaFiltriLibri()">
+                            Resetta Filtri
+                        </button>
                     </div>
                 </div>
 
