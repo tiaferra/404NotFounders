@@ -1,7 +1,23 @@
 <?php
 include 'conn.php';
 
-$sql = "SELECT numero, tipo, titolo FROM Ricetta";
+$sql = "SELECT 
+    R.numero,
+    R.titolo,
+    R.tipo,
+    COUNT(DISTINCT RP.libro) AS numeroLibri,
+    GROUP_CONCAT(DISTINCT L.titolo SEPARATOR ', ') AS titoliLibri
+FROM 
+    Ricetta R
+LEFT JOIN 
+    RicettaPubblicata RP ON R.numero = RP.numeroRicetta
+LEFT JOIN 
+    Libro L ON RP.libro = L.codISBN
+GROUP BY 
+    R.numero, R.titolo, R.tipo
+ORDER BY 
+    R.numero;
+";
 $result = $conn->query($sql);
 
 $ricette = array();

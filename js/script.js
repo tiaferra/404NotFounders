@@ -74,7 +74,7 @@ function caricaTabellaRicetta() {
   fetch('php/get_ricette.php')
     .then(res => res.json())
     .then(data => {
-      mostraTabella(data, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
+      mostraTabella(data, ['numero', 'tipo', 'titolo', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
     })
     .catch(err => console.error("Errore caricamento Ricette:", err));
 }
@@ -84,7 +84,7 @@ function caricaTabellaLibro() {
   fetch('php/get_libri.php')
     .then(res => res.json())
     .then(data => {
-      mostraTabella(data, ['codISBN', 'titolo', 'anno'], 'tabellaLibro');
+      mostraTabella(data, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
     })
     .catch(err => console.error("Errore caricamento Libri:", err));
 }
