@@ -81,19 +81,12 @@ function caricaTabellaRegione() {
 
 // Carica Ricette
 function caricaTabellaRicetta() {
-    if (ricetteData.length === 0) {
-        // MODIFICA QUI: usa il nuovo endpoint che include le regioni
-        fetch('php/get_ricette_con_regioni.php')
-            .then(res => res.json())
-            .then(data => {
-                ricetteData = data;
-                mostraTabella(data, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
-                caricaRegioniPerRicette(); // Carica le regioni per il dropdown
-            })
-            .catch(err => console.error("Errore caricamento Ricette:", err));
-    } else {
-        mostraTabella(ricetteData, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
-    }
+  fetch('php/get_ricette.php')
+    .then(res => res.json())
+    .then(data => {
+      mostraTabella(data, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
+    })
+    .catch(err => console.error("Errore caricamento Ricette:", err));
 }
 
 // Carica Libri
@@ -101,7 +94,7 @@ function caricaTabellaLibro() {
   fetch('php/get_libri.php')
     .then(res => res.json())
     .then(data => {
-      mostraTabella(data, ['codISBN', 'titolo', 'anno'], 'tabellaLibro');
+      mostraTabella(data, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
     })
     .catch(err => console.error("Errore caricamento Libri:", err));
 }
