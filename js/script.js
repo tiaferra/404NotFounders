@@ -39,7 +39,14 @@ document.querySelectorAll('input[name="scelta"]').forEach(radio => {
 
 // Funzione generica per mostrare i dati in una tabella
 function mostraTabella(data, colonne, idTabella) {
+    console.log("Mostra tabella:", idTabella, "con dati:", data); // Debug
+    
     const tabella = document.getElementById(idTabella);
+    if (!tabella) {
+        console.error("Elemento tabella non trovato:", idTabella);
+        return;
+    }
+    
     tabella.innerHTML = "";
 
     // Intestazione
@@ -52,17 +59,27 @@ function mostraTabella(data, colonne, idTabella) {
     tabella.appendChild(headerRow);
 
     // Dati
-    data.forEach(riga => {
-        const row = document.createElement("tr");
-        colonne.forEach(col => {
-            const cell = document.createElement("td");
-            cell.textContent = riga[col];
-            row.appendChild(cell);
+    if (data && data.length > 0) {
+        data.forEach(riga => {
+            const row = document.createElement("tr");
+            colonne.forEach(col => {
+                const cell = document.createElement("td");
+                cell.textContent = riga[col] || 'N/A'; // Gestione valori nulli
+                row.appendChild(cell);
+            });
+            tabella.appendChild(row);
         });
+    } else {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = colonne.length;
+        cell.textContent = "Nessun dato disponibile";
+        row.appendChild(cell);
         tabella.appendChild(row);
-    });
+    }
 
     tabella.style.display = "table";
+    console.log("Tabella mostrata:", tabella); // Debug
 }
 
 function caricaTabellaRegione() {
@@ -81,13 +98,33 @@ function caricaTabellaRegione() {
 
 // Carica Ricette
 function caricaTabellaRicetta() {
-  fetch('php/get_ricette.php')
-    .then(res => res.json())
-    .then(data => {
-      ricetteData = data;
-      mostraTabella(data, ['numero', 'tipo', 'titolo', 'regione', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
-    })
-    .catch(err => console.error("Errore caricamento Ricette:", err));
+  // Assicurati di caricare le regioni per il dropdown
+  caricaRegioniPerRicette();
+  
+  if (ricetteData.length === 0) {
+    fetch('php/get_ricette.php')
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Errore nella richiesta');
+        }
+        return res.json();
+      })
+      .then(data => {
+        console.log("Dati ricevuti:", data); // Debug
+        ricetteData = data;
+        mostraTabella(data, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+      })
+      .catch(err => {
+        console.error("Errore caricamento Ricette:", err);
+        // Mostra un messaggio di errore
+        const tabella = document.getElementById('tabellaRicetta');
+        tabella.innerHTML = "<tr><td>Errore nel caricamento dei dati</td></tr>";
+        tabella.style.display = "table";
+      });
+  } else {
+    console.log("Usa dati esistenti:", ricetteData); // Debug
+    mostraTabella(ricetteData, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+  }
 }
 
 // Carica Libri
@@ -111,17 +148,20 @@ function filtraRegioni() {
 }
 
 function caricaRegioniPerRicette() {
-    if (regioniData.length === 0) {
-        fetch('php/get_regioni.php')
-            .then(res => res.json())
-            .then(data => {
-                regioniData = data;
-                popolaDropdownRegioni();
-            })
-            .catch(err => console.error("Errore caricamento Regioni:", err));
-    } else {
+    // Se abbiamo già i dati delle regioni, popoliamo subito il dropdown
+    if (regioniData.length > 0) {
         popolaDropdownRegioni();
+        return;
     }
+
+    // Altrimenti carichiamo i dati
+    fetch('php/get_regioni.php')
+        .then(res => res.json())
+        .then(data => {
+            regioniData = data;
+            popolaDropdownRegioni();
+        })
+        .catch(err => console.error("Errore caricamento Regioni:", err));
 }
 
 function popolaDropdownRegioni() {
@@ -150,14 +190,11 @@ function filtraRicette() {
         const matchTitolo = ricetta.titolo.toLowerCase().includes(titolo);
         const matchTipo = tipo === '' || ricetta.tipo === tipo;
         
-        // MODIFICA QUI: usa il campo regioni
         const matchRegione = regione === '' || 
-         (ricetta.regione && ricetta.regione.toLowerCase().includes(regione.toLowerCase()));
+         (ricetta.regioni && ricetta.regioni.toLowerCase().includes(regione.toLowerCase()));
 
-        
         return matchTitolo && matchTipo && matchRegione;
     });
 
-   mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regione', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
-
+   mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
 }
