@@ -117,12 +117,17 @@ function caricaTabellaRicetta() {
 
 // Carica Libri
 function caricaTabellaLibro() {
-  fetch('php/get_libri.php')
-    .then(res => res.json())
-    .then(data => {
-      mostraTabella(data, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
-    })
-    .catch(err => console.error("Errore caricamento Libri:", err));
+  if (libriData.length === 0) {
+    fetch('php/get_libri.php')
+      .then(res => res.json())
+      .then(data => {
+        libriData = data;
+        mostraTabella(data, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+      })
+      .catch(err => console.error("Errore caricamento Libri:", err));
+  } else {
+    mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+  }
 }
 
 
@@ -219,4 +224,27 @@ function filtraRicette() {
     });
 
    mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+}
+
+function filtraLibri() {
+    const isbn = document.getElementById('filtroISBN').value.toLowerCase();
+    const titolo = document.getElementById('filtroTitoloLibro').value.toLowerCase();
+    const minAnno = parseInt(document.getElementById('filtroMinAnno').value) || 0;
+    const maxAnno = parseInt(document.getElementById('filtroMaxAnno').value) || Infinity;
+    const minPagine = parseInt(document.getElementById('filtroMinPagine').value) || 0;
+    const maxPagine = parseInt(document.getElementById('filtroMaxPagine').value) || Infinity;
+    const minRicette = parseInt(document.getElementById('filtroMinRicette').value) || 0;
+    const maxRicette = parseInt(document.getElementById('filtroMaxRicette').value) || Infinity;
+
+    const libriFiltrati = libriData.filter(libro => {
+        const matchISBN = isbn === '' || (libro.codISBN && libro.codISBN.toLowerCase().includes(isbn));
+        const matchTitolo = titolo === '' || (libro.titolo && libro.titolo.toLowerCase().includes(titolo));
+        const matchAnno = (libro.anno >= minAnno) && (libro.anno <= maxAnno);
+        const matchPagine = (libro.numeroPagine >= minPagine) && (libro.numeroPagine <= maxPagine);
+        const matchRicette = (libro.numeroRicette >= minRicette) && (libro.numeroRicette <= maxRicette);
+
+        return matchISBN && matchTitolo && matchAnno && matchPagine && matchRicette;
+    });
+
+    mostraTabella(libriFiltrati, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
 }

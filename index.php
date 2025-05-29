@@ -89,11 +89,44 @@
             </div>
 
                 <div id="opzioni3" class="options-group">
-                    <h3>Opzioni per Pallino 3:</h3>
-                    <input type="checkbox" id="opt3a"><label for="opt3a" class="checkbox-label">Opzione 3A</label>
-                    <input type="checkbox" id="opt3b"><label for="opt3b" class="checkbox-label">Opzione 3B</label>
-                    <input type="checkbox" id="opt3c"><label for="opt3c" class="checkbox-label">Opzione 3C</label>
-                    <input type="checkbox" id="opt3d"><label for="opt3d" class="checkbox-label">Opzione 3D</label>
+                    <h3>Filtri per Libri:</h3>
+                    
+                    <div class="filtro-riga">
+                        <label for="filtroISBN">ISBN:</label>
+                        <input type="text" id="filtroISBN" placeholder="Cerca ISBN..." oninput="filtraLibri()">
+                    </div>
+                    
+                    <div class="filtro-riga">
+                        <label for="filtroTitoloLibro">Titolo:</label>
+                        <input type="text" id="filtroTitoloLibro" placeholder="Cerca titolo..." oninput="filtraLibri()">
+                    </div>
+                    
+                    <div class="filtro-riga">
+                        <label>Anno:</label>
+                        <div class="range-group">
+                            <input type="number" id="filtroMinAnno" min="0" placeholder="Min" oninput="filtraLibri()">
+                            <span>-</span>
+                            <input type="number" id="filtroMaxAnno" min="0" placeholder="Max" oninput="filtraLibri()">
+                        </div>
+                    </div>
+
+                    <div class="filtro-riga">
+                        <label>Pagine:</label>
+                        <div class="range-group">
+                            <input type="number" id="filtroMinPagine" min="0" placeholder="Min" oninput="filtraLibri()">
+                            <span>-</span>
+                            <input type="number" id="filtroMaxPagine" min="0" placeholder="Max" oninput="filtraLibri()">
+                        </div>
+                    </div>
+
+                    <div class="filtro-riga">
+                        <label>Ricette:</label>
+                        <div class="range-group">
+                            <input type="number" id="filtroMinRicette" min="0" placeholder="Min" oninput="filtraLibri()">
+                            <span>-</span>
+                            <input type="number" id="filtroMaxRicette" min="0" placeholder="Max" oninput="filtraLibri()">
+                        </div>
+                    </div>
                 </div>
 
 

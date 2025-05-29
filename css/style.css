@@ -223,3 +223,23 @@
     min-width: auto;
     margin-right: 5px;
 }
+
+/* Per i campi numerici nei filtri dei libri */
+.filtro-riga input[type="number"] {
+    width: 70px;
+    margin-right: 10px;
+}
+
+/* Riduci la larghezza delle label per i filtri a range */
+.filtro-riga label[for^="filtroMin"],
+.filtro-riga label[for^="filtroMax"] {
+    min-width: auto;
+    margin-right: 5px;
+}
+
+/* Layout per le righe con due campi */
+.filtro-riga .range-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
