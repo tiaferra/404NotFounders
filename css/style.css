@@ -276,3 +276,132 @@
 #resetFiltri:hover {
     background-color: #e74c3c;
 }
+
+/* Stile per il modale */
+.modale {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modale-contenuto {
+    background-color: var(--bianco);
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 80%;
+    max-width: 500px;
+    color: var(--verde-scurissimo);
+    position: relative;
+}
+
+.chiudi {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.chiudi:hover {
+    color: var(--verde-scuro);
+}
+
+.form-riga {
+    margin-bottom: 15px;
+}
+
+.form-riga label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-riga input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.btn-elimina {
+    background-color: #e74c3c !important;
+    margin-left: 10px;
+}
+
+.btn-elimina:hover {
+    background-color: #c0392b !important;
+}
+
+/* Stile per le azioni nella tabella libri */
+.azioni-cell {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-azione {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-modifica {
+    background-color: var(--verde-chiaro);
+    color: white;
+}
+
+.btn-elimina-tabella {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* Stile per il form di inserimento */
+#form-libro-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    color: var(--verde-scurissimo);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#form-libro-container h2 {
+    color: var(--verde-scuro);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-riga {
+    margin-bottom: 15px;
+}
+
+.form-riga label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--verde-scuro);
+}
+
+.form-riga input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--verde-medio);
+    background-color: white;
+    color: var(--verde-scurissimo);
+}
+
+.form-azioni {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
