@@ -84,7 +84,8 @@ function caricaTabellaRicetta() {
   fetch('php/get_ricette.php')
     .then(res => res.json())
     .then(data => {
-      mostraTabella(data, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
+      ricetteData = data;
+      mostraTabella(data, ['numero', 'tipo', 'titolo', 'regione', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
     })
     .catch(err => console.error("Errore caricamento Ricette:", err));
 }
@@ -151,10 +152,12 @@ function filtraRicette() {
         
         // MODIFICA QUI: usa il campo regioni
         const matchRegione = regione === '' || 
-                             (ricetta.regioni && ricetta.regioni.toLowerCase().includes(regione.toLowerCase()));
+         (ricetta.regione && ricetta.regione.toLowerCase().includes(regione.toLowerCase()));
+
         
         return matchTitolo && matchTipo && matchRegione;
     });
 
-    mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo'], 'tabellaRicetta');
+   mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regione', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+
 }
