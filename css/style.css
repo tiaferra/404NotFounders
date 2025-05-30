@@ -3,7 +3,7 @@
             --verde-medio: #27ae60;
             --verde-scuro: #1e8449;
             --bianco: #ffffff;
-            --verde-scurissimo: #103c22;
+            --verde-scurissimo: #0c4100c9;
         }
         
         * {
@@ -12,6 +12,11 @@
             padding: 0;
         }
         
+
+        html {
+          scroll-behavior: smooth;
+        }
+
         body {
             display: flex;
             flex-direction: column;
@@ -21,12 +26,31 @@
         }
         
         /* Header Stile */
-        .header {
+        /*.header {
             background-color: var(--verde-scuro);
             color: var(--bianco);
             padding: 1rem 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }*/
+
+        .header {
+            background: linear-gradient(to right, #2e7d32, #1b5e20);
+            color: white;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 8px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.3rem;
+            transition: background 0.3s ease;
         }
+
+        .header:hover {
+            background: linear-gradient(to right, #388e3c, #2e7d32);
+        }
+
         
         .logo {
             font-size: 1.8rem;
@@ -103,6 +127,10 @@
         .tabella th {
             background-color: var(--verde-chiaro);
             color: white;
+        }
+
+        .tabella tr:hover {
+           background-color: rgba(46, 204, 113, 0.1);
         }
         .scroll-container {
             max-height: calc(17 * 40px);
