@@ -29,8 +29,8 @@ function mostraOpzioni(id) {
 }
 
 function nascondiTutto() {
-    document.getElementById('tabella-container').style.display = 'none';
     document.getElementById('form-libro-container').style.display = 'none';
+    document.getElementById('tabella-container').style.display = 'none';
     document.querySelectorAll('.tabella').forEach(tab => tab.style.display = 'none');
 }
 
