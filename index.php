@@ -169,29 +169,6 @@
                     </div>
                 </div>
                 
-         <!--       <div id="form-libro-container" style="display:none;">
-                    <h2>Inserisci Nuovo Libro</h2>
-                    <form id="formNuovoLibro">
-                        <div class="form-riga">
-                            <label for="nuovoISBN">ISBN:</label>
-                            <input type="text" id="nuovoISBN" name="isbn" required maxlength="13">
-                        </div>
-                        
-                        <div class="form-riga">
-                            <label for="nuovoTitolo">Titolo:</label>
-                            <input type="text" id="nuovoTitolo" name="titolo" required>
-                        </div>
-                        
-                        <div class="form-riga">
-                            <label for="nuovoAnno">Anno di pubblicazione:</label>
-                            <input type="number" id="nuovoAnno" name="anno" min="1900" max="2099" required>
-                        </div> 
-                        <div class="form-azioni">
-                            <button type="submit" class="nav-button">Salva Libro</button>
-                            <button type="button" class="nav-button" onclick="annullaInserimento()">Annulla</button>
-                        </div>
-                    </form>
-                </div>//-->
             </div>
         </div>
 

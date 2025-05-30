@@ -1,53 +1,71 @@
-// Variabile globale per memorizzare i dati delle regioni
+// Variabili globali per memorizzare i dati
 let regioniData = [];
 let ricetteData = [];
 let libriData = [];
-// Mostra il gruppo di opzioni e nasconde le altre
+
+// Funzioni di inizializzazione e gestione UI
 function mostraOpzioni(id) {
-    const gruppi = document.querySelectorAll('.options-group');
-    gruppi.forEach(gruppo => {
+    // Nascondi tutti i gruppi di opzioni
+    document.querySelectorAll('.options-group').forEach(gruppo => {
         gruppo.style.display = 'none';
     });
 
+    // Mostra il gruppo selezionato
     document.getElementById(id).style.display = 'block';
-
-    const tabelle = document.querySelectorAll('table');
-    tabelle.forEach(tabella => tabella.style.display = 'none');
-    
     document.getElementById('tabella-container').style.display = 'block';
-
     document.getElementById('form-libro-container').style.display = 'none';
 
-    if (id === 'opzioni1') {
-        caricaTabellaRegione();
-    } else if (id === 'opzioni2') {
-        caricaTabellaRicetta();
-    } else if (id === 'opzioni3') {
-        caricaTabellaLibro();
+    // Nascondi tutte le tabelle
+    document.querySelectorAll('table').forEach(tabella => {
+        tabella.style.display = 'none';
+    });
+
+    // Carica la tabella appropriata
+    switch(id) {
+        case 'opzioni1': caricaTabellaRegione(); break;
+        case 'opzioni2': caricaTabellaRicetta(); break;
+        case 'opzioni3': caricaTabellaLibro(); break;
     }
 }
 
-// Inizializzazione - mostra la home all'avvio
-document.addEventListener('DOMContentLoaded', function() {
-    mostraHome();
-});
+function nascondiTutto() {
+    document.getElementById('tabella-container').style.display = 'none';
+    document.getElementById('form-libro-container').style.display = 'none';
+    document.querySelectorAll('.tabella').forEach(tab => tab.style.display = 'none');
+}
 
-// Gestisce la selezione dei radio
-document.querySelectorAll('input[name="scelta"]').forEach(radio => {
-  radio.addEventListener('change', function () {
-    mostraOpzioni('opzioni' + this.value.slice(-1));
+function mostraHome() {
+    nascondiTutto();
+    document.querySelectorAll('.options-group').forEach(gruppo => gruppo.style.display = 'none');
+}
 
-    if (this.value === 'opzione1') {
-      caricaTabellaRegione();
-    } else if (this.value === 'opzione2') {
-      caricaTabellaRicetta();
-    } else if (this.value === 'opzione3') {
-      caricaTabellaLibro();
-    }
-  });
-});
+function mostraLibri() {
+    nascondiTutto();
+    document.getElementById('tabella-container').style.display = 'block';
+    caricaTabellaLibro();
+    document.getElementById('opzioni3').style.display = 'block';
+}
 
-// Funzione generica per mostrare i dati in una tabella
+function mostraRicette() {
+    nascondiTutto();
+    document.getElementById('tabella-container').style.display = 'block';
+    caricaTabellaRicetta();
+    document.getElementById('opzioni2').style.display = 'block';
+}
+
+function mostraFormLibro() {
+    nascondiTutto();
+    document.getElementById('form-libro-container').style.display = 'block';
+    document.getElementById('nuovoISBN').focus();
+    document.querySelectorAll('.options-group').forEach(gruppo => gruppo.style.display = 'none');
+}
+
+function annullaInserimento() {
+    document.getElementById('formNuovoLibro').reset();
+    mostraLibri();
+}
+
+// Funzioni per la gestione delle tabelle
 function mostraTabella(data, colonne, idTabella) {
     const tabella = document.getElementById(idTabella);
     tabella.innerHTML = "";
@@ -59,26 +77,27 @@ function mostraTabella(data, colonne, idTabella) {
         th.textContent = col;
         headerRow.appendChild(th);
     });
-    
-    // Aggiungi colonna azioni se è la tabella libri
+
+    // Aggiungi colonna azioni per la tabella libri
     if (idTabella === 'tabellaLibro') {
         const azioniHeader = document.createElement("th");
         azioniHeader.textContent = "Azioni";
         headerRow.appendChild(azioniHeader);
     }
-    
+
     tabella.appendChild(headerRow);
 
-    // Dati
+    // Popola i dati
     data.forEach(riga => {
         const row = document.createElement("tr");
+        
         colonne.forEach(col => {
             const cell = document.createElement("td");
             cell.textContent = riga[col] || 'N/A';
             row.appendChild(cell);
         });
-        
-        // Aggiungi azioni per i libri
+
+        // Aggiungi pulsanti azione per i libri
         if (idTabella === 'tabellaLibro') {
             const azioniCell = document.createElement("td");
             azioniCell.className = "azioni-cell";
@@ -86,13 +105,11 @@ function mostraTabella(data, colonne, idTabella) {
             const btnModifica = document.createElement("button");
             btnModifica.textContent = "Modifica";
             btnModifica.className = "btn-azione btn-modifica";
-            btnModifica.setAttribute("data-isbn", riga.codISBN);
             btnModifica.onclick = () => apriModaleModificaLibro(riga);
             
             const btnElimina = document.createElement("button");
             btnElimina.textContent = "Elimina";
             btnElimina.className = "btn-azione btn-elimina-tabella";
-            btnElimina.setAttribute("data-isbn", riga.codISBN);
             btnElimina.onclick = () => eliminaLibro(riga.codISBN);
             
             azioniCell.appendChild(btnModifica);
@@ -111,36 +128,33 @@ function caricaTabellaRegione() {
         fetch('php/get_regioni.php')
             .then(res => res.json())
             .then(data => {
-                regioniData = data; // Salva i dati
+                regioniData = data;
                 mostraTabella(data, ['cod', 'nome'], 'tabellaRegione');
             })
-            .catch(err => console.error("Errore caricamento Regione:", err));
+            .catch(err => console.error("Errore caricamento Regioni:", err));
     } else {
         mostraTabella(regioniData, ['cod', 'nome'], 'tabellaRegione');
     }
 }
 
-// Carica Ricette
 function caricaTabellaRicetta() {
-  caricaRegioniPerRicette();
-  caricaLibriPerRicette(); // Carica i libri per il dropdown
-  
-  if (ricetteData.length === 0) {
-    fetch('php/get_ricette.php')
-      .then(res => res.json())
-      .then(data => {
-        ricetteData = data;
-        mostraTabella(data, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
-      })
-      .catch(err => console.error("Errore caricamento Ricette:", err));
-  } else {
-    mostraTabella(ricetteData, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
-  }
+    caricaRegioniPerRicette();
+    caricaLibriPerRicette();
+    
+    if (ricetteData.length === 0) {
+        fetch('php/get_ricette.php')
+            .then(res => res.json())
+            .then(data => {
+                ricetteData = data;
+                mostraTabella(data, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+            })
+            .catch(err => console.error("Errore caricamento Ricette:", err));
+    } else {
+        mostraTabella(ricetteData, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+    }
 }
 
-// Carica Libri
 function caricaTabellaLibro() {
-    // Assicurati che la tabella sia visibile
     document.getElementById('tabellaLibro').style.display = 'table';
     
     if (libriData.length === 0) {
@@ -149,31 +163,60 @@ function caricaTabellaLibro() {
             .then(data => {
                 libriData = data;
                 mostraTabella(data, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+                popolaDropdownAnni();
             })
             .catch(err => console.error("Errore caricamento Libri:", err));
     } else {
         mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+        popolaDropdownAnni();
     }
 }
 
+// Funzioni per i dropdown
+function popolaDropdownRegioni() {
+    const select = document.getElementById('filtroRegioneRicetta');
+    while (select.options.length > 1) select.remove(1);
+    
+    regioniData.forEach(regione => {
+        const option = document.createElement('option');
+        option.value = regione.nome;
+        option.textContent = regione.nome;
+        select.appendChild(option);
+    });
+}
 
-// Funzione per filtrare le regioni
-function filtraRegioni() {
-    const filtro = document.getElementById('filtroRegione').value.toLowerCase();
-    const regioniFiltrate = regioniData.filter(regione => 
-        regione.nome.toLowerCase().includes(filtro)
-    );
-    mostraTabella(regioniFiltrate, ['cod', 'nome'], 'tabellaRegione');
+function popolaDropdownLibri() {
+    const select = document.getElementById('filtroLibro');
+    while (select.options.length > 1) select.remove(1);
+    
+    libriData.forEach(libro => {
+        const option = document.createElement('option');
+        option.value = libro.titolo;
+        option.textContent = libro.titolo;
+        select.appendChild(option);
+    });
+}
+
+function popolaDropdownAnni() {
+    const anni = estraiAnniUnici(libriData);
+    const minAnnoSelect = document.getElementById('filtroMinAnno');
+    const maxAnnoSelect = document.getElementById('filtroMaxAnno');
+    
+    while (minAnnoSelect.options.length > 1) minAnnoSelect.remove(1);
+    while (maxAnnoSelect.options.length > 1) maxAnnoSelect.remove(1);
+    
+    anni.forEach(anno => {
+        const option = document.createElement('option');
+        option.value = anno;
+        option.textContent = anno;
+        minAnnoSelect.appendChild(option);
+        maxAnnoSelect.appendChild(option.cloneNode(true));
+    });
 }
 
 function caricaRegioniPerRicette() {
-    // Se abbiamo già i dati delle regioni, popoliamo subito il dropdown
-    if (regioniData.length > 0) {
-        popolaDropdownRegioni();
-        return;
-    }
-
-    // Altrimenti carichiamo i dati
+    if (regioniData.length > 0) return popolaDropdownRegioni();
+    
     fetch('php/get_regioni.php')
         .then(res => res.json())
         .then(data => {
@@ -183,28 +226,9 @@ function caricaRegioniPerRicette() {
         .catch(err => console.error("Errore caricamento Regioni:", err));
 }
 
-function popolaDropdownRegioni() {
-    const select = document.getElementById('filtroRegioneRicetta');
-    
-    // Mantieni l'opzione "Tutte le regioni"
-    while (select.options.length > 1) {
-        select.remove(1);
-    }
-    
-    regioniData.forEach(regione => {
-        const option = document.createElement('option');
-        option.value = regione.nome;
-        option.textContent = regione.nome;
-        select.appendChild(option);
-    });
-}
-// Funzione per caricare i libri
 function caricaLibriPerRicette() {
-    if (libriData.length > 0) {
-        popolaDropdownLibri();
-        return;
-    }
-
+    if (libriData.length > 0) return popolaDropdownLibri();
+    
     fetch('php/get_libri.php')
         .then(res => res.json())
         .then(data => {
@@ -213,22 +237,16 @@ function caricaLibriPerRicette() {
         })
         .catch(err => console.error("Errore caricamento Libri:", err));
 }
-// Popola il dropdown dei libri
-function popolaDropdownLibri() {
-    const select = document.getElementById('filtroLibro');
-    // Mantieni l'opzione "Tutti i libri"
-    while (select.options.length > 1) {
-        select.remove(1);
-    }
 
-    libriData.forEach(libro => {
-        const option = document.createElement('option');
-        option.value = libro.titolo;
-        option.textContent = libro.titolo;
-        select.appendChild(option);
-    });
+// Funzioni di filtraggio
+function filtraRegioni() {
+    const filtro = document.getElementById('filtroRegione').value.toLowerCase();
+    const regioniFiltrate = regioniData.filter(regione => 
+        regione.nome.toLowerCase().includes(filtro)
+    );
+    mostraTabella(regioniFiltrate, ['cod', 'nome'], 'tabellaRegione');
 }
-// Funzione di filtraggio per le ricette
+
 function filtraRicette() {
     const titolo = document.getElementById('filtroTitolo').value.toLowerCase();
     const tipo = document.getElementById('filtroTipo').value;
@@ -238,84 +256,44 @@ function filtraRicette() {
     const libroSelezionato = document.getElementById('filtroLibro').value;
 
     const ricetteFiltrate = ricetteData.filter(ricetta => {
-        const matchTitolo = ricetta.titolo.toLowerCase().includes(titolo);
-        const matchTipo = tipo === '' || ricetta.tipo === tipo;
-        const matchRegione = regione === '' || 
-                            (ricetta.regioni && ricetta.regioni.toLowerCase().includes(regione.toLowerCase()));
-        const matchNumeroLibri = ricetta.numeroLibri >= minLibri && ricetta.numeroLibri <= maxLibri;
-        const matchLibro = libroSelezionato === '' || 
-                          (ricetta.titoliLibri && ricetta.titoliLibri.toLowerCase().includes(libroSelezionato.toLowerCase()));
-
-        return matchTitolo && matchTipo && matchRegione && matchNumeroLibri && matchLibro;
+        return ricetta.titolo.toLowerCase().includes(titolo) &&
+               (tipo === '' || ricetta.tipo === tipo) &&
+               (regione === '' || ricetta.regioni?.toLowerCase().includes(regione.toLowerCase())) &&
+               ricetta.numeroLibri >= minLibri && ricetta.numeroLibri <= maxLibri &&
+               (libroSelezionato === '' || ricetta.titoliLibri?.toLowerCase().includes(libroSelezionato.toLowerCase()));
     });
 
-   mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+    mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
 }
 
 function filtraLibri() {
     const isbn = document.getElementById('filtroISBN').value.toLowerCase();
     const titolo = document.getElementById('filtroTitoloLibro').value.toLowerCase();
-    
-    // Gestione dropdown anni
-    const minAnnoSelect = document.getElementById('filtroMinAnno');
-    const minAnno = minAnnoSelect.value ? parseInt(minAnnoSelect.value) : 0;
-    const maxAnnoSelect = document.getElementById('filtroMaxAnno');
-    const maxAnno = maxAnnoSelect.value ? parseInt(maxAnnoSelect.value) : Infinity;
-    
+    const minAnno = parseInt(document.getElementById('filtroMinAnno').value) || 0;
+    const maxAnno = parseInt(document.getElementById('filtroMaxAnno').value) || Infinity;
     const minPagine = parseInt(document.getElementById('filtroMinPagine').value) || 0;
     const maxPagine = parseInt(document.getElementById('filtroMaxPagine').value) || Infinity;
     const minRicette = parseInt(document.getElementById('filtroMinRicette').value) || 0;
     const maxRicette = parseInt(document.getElementById('filtroMaxRicette').value) || Infinity;
 
     const libriFiltrati = libriData.filter(libro => {
-        const matchISBN = isbn === '' || (libro.codISBN && libro.codISBN.toLowerCase().includes(isbn));
-        const matchTitolo = titolo === '' || (libro.titolo && libro.titolo.toLowerCase().includes(titolo));
-        const matchAnno = (minAnno === 0 || libro.anno >= minAnno) && 
-                         (maxAnno === Infinity || libro.anno <= maxAnno);
-        const matchPagine = (libro.numeroPagine >= minPagine) && (libro.numeroPagine <= maxPagine);
-        const matchRicette = (libro.numeroRicette >= minRicette) && (libro.numeroRicette <= maxRicette);
-
-        return matchISBN && matchTitolo && matchAnno && matchPagine && matchRicette;
+        return (isbn === '' || libro.codISBN?.toLowerCase().includes(isbn)) &&
+               (titolo === '' || libro.titolo?.toLowerCase().includes(titolo)) &&
+               libro.anno >= minAnno && libro.anno <= maxAnno &&
+               libro.numeroPagine >= minPagine && libro.numeroPagine <= maxPagine &&
+               libro.numeroRicette >= minRicette && libro.numeroRicette <= maxRicette;
     });
 
     mostraTabella(libriFiltrati, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
 }
 
-// Funzione per estrarre gli anni unici dai dati dei libri
+// Funzioni di supporto
 function estraiAnniUnici(libri) {
     const anni = new Set();
-    libri.forEach(libro => {
-        if (libro.anno) {
-            anni.add(libro.anno);
-        }
-    });
-    return Array.from(anni).sort((a, b) => b - a); // Ordina dal più recente
+    libri.forEach(libro => libro.anno && anni.add(libro.anno));
+    return Array.from(anni).sort((a, b) => b - a);
 }
 
-// Popola i dropdown degli anni
-function popolaDropdownAnni() {
-    const anni = estraiAnniUnici(libriData);
-    const minAnnoSelect = document.getElementById('filtroMinAnno');
-    const maxAnnoSelect = document.getElementById('filtroMaxAnno');
-    
-    // Popola minAnnoSelect
-    anni.forEach(anno => {
-        const option = document.createElement('option');
-        option.value = anno;
-        option.textContent = anno;
-        minAnnoSelect.appendChild(option);
-    });
-    
-    // Popola maxAnnoSelect (stessi valori)
-    anni.forEach(anno => {
-        const option = document.createElement('option');
-        option.value = anno;
-        option.textContent = anno;
-        maxAnnoSelect.appendChild(option);
-    });
-}
-
-// Funzione per resettare i filtri
 function resettaFiltriLibri() {
     document.getElementById('filtroISBN').value = '';
     document.getElementById('filtroTitoloLibro').value = '';
@@ -325,31 +303,25 @@ function resettaFiltriLibri() {
     document.getElementById('filtroMaxPagine').value = '';
     document.getElementById('filtroMinRicette').value = '';
     document.getElementById('filtroMaxRicette').value = '';
-    
-    filtraLibri(); // Applica il reset
+    filtraLibri();
 }
 
-// Funzione per resettare i filtri delle ricette
 function resettaFiltriRicette() {
-    // Resetta tutti i campi di input
     document.getElementById('filtroTitolo').value = '';
     document.getElementById('filtroTipo').value = '';
     document.getElementById('filtroRegioneRicetta').value = '';
     document.getElementById('filtroMinLibri').value = '';
     document.getElementById('filtroMaxLibri').value = '';
     document.getElementById('filtroLibro').value = '';
-    
-    // Ri-applica il filtro (mostra tutti i risultati)
     filtraRicette();
 }
 
-// Funzione per aprire il modale di modifica libro
+// Funzioni per la gestione dei libri
 function apriModaleModificaLibro(libro) {
     document.getElementById('modaleISBN').value = libro.codISBN;
     document.getElementById('modaleTitolo').value = libro.titolo;
     document.getElementById('modaleAnno').value = libro.anno;
     
-    // Configura l'evento di eliminazione
     document.getElementById('btnEliminaLibro').onclick = () => {
         if (confirm(`Sei sicuro di voler eliminare il libro "${libro.titolo}"?`)) {
             eliminaLibro(libro.codISBN);
@@ -359,31 +331,25 @@ function apriModaleModificaLibro(libro) {
     
     document.getElementById('modaleModificaLibro').style.display = 'block';
 }
-// Funzione per eliminare un libro
+
 function eliminaLibro(isbn) {
-    fetch(`php/elimina_libro.php?isbn=${isbn}`, {
-        method: 'DELETE'
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Rimuovi il libro dai dati locali
-            libriData = libriData.filter(libro => libro.codISBN !== isbn);
-            
-            // Aggiorna la tabella
-            mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
-            
-            alert('Libro eliminato con successo!');
-        } else {
-            alert('Errore durante l\'eliminazione: ' + data.message);
-        }
-    })
-    .catch(err => {
-        console.error("Errore eliminazione libro:", err);
-        alert('Si è verificato un errore durante l\'eliminazione');
-    });
+    fetch(`php/elimina_libro.php?isbn=${isbn}`, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                libriData = libriData.filter(libro => libro.codISBN !== isbn);
+                mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+                alert('Libro eliminato con successo!');
+            } else {
+                alert('Errore durante l\'eliminazione: ' + data.message);
+            }
+        })
+        .catch(err => {
+            console.error("Errore eliminazione libro:", err);
+            alert('Si è verificato un errore durante l\'eliminazione');
+        });
 }
-// Funzione per salvare le modifiche a un libro
+
 function salvaModificheLibro(e) {
     e.preventDefault();
     
@@ -393,10 +359,8 @@ function salvaModificheLibro(e) {
     
     fetch('php/modifica_libro.php', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ isbn, titolo, anno }) // Rimuovi pagine
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isbn, titolo, anno })
     })
     .then(response => response.json())
     .then(data => {
@@ -405,10 +369,8 @@ function salvaModificheLibro(e) {
             if (libroIndex !== -1) {
                 libriData[libroIndex].titolo = titolo;
                 libriData[libroIndex].anno = anno;
-                // Non modificare numeroPagine e numeroRicette
                 mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
             }
-            
             document.getElementById('modaleModificaLibro').style.display = 'none';
             alert('Modifiche salvate con successo!');
         } else {
@@ -421,113 +383,71 @@ function salvaModificheLibro(e) {
     });
 }
 
-// Inizializzazione degli eventi
+// Inizializzazione
 document.addEventListener('DOMContentLoaded', function() {
-    // Gestione chiusura modale
-    document.querySelector('.chiudi').addEventListener('click', function() {
+    mostraHome();
+    
+    // Gestione selezione radio buttons
+    document.querySelectorAll('input[name="scelta"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const opzioneId = 'opzioni' + this.value.slice(-1);
+            mostraOpzioni(opzioneId);
+            
+            switch(this.value) {
+                case 'opzione1': caricaTabellaRegione(); break;
+                case 'opzione2': caricaTabellaRicetta(); break;
+                case 'opzione3': caricaTabellaLibro(); break;
+            }
+        });
+    });
+
+    // Gestione modale
+    document.querySelector('.chiudi').addEventListener('click', () => {
         document.getElementById('modaleModificaLibro').style.display = 'none';
     });
     
-    // Gestione submit form modifica
     document.getElementById('formModificaLibro').addEventListener('submit', salvaModificheLibro);
     
-    // Chiusura modale cliccando fuori dal contenuto
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', (event) => {
         const modale = document.getElementById('modaleModificaLibro');
-        if (event.target === modale) {
-            modale.style.display = 'none';
-        }
+        if (event.target === modale) modale.style.display = 'none';
     });
-});
 
-function mostraHome() {
-    nascondiTutto();
-    const gruppi = document.querySelectorAll('.options-group');
-    gruppi.forEach(gruppo => {
-        gruppo.style.display = 'none';
-    });
-}
-
-function mostraLibri() {
-    nascondiTutto();
-    document.getElementById('tabella-container').style.display = 'block';
-    caricaTabellaLibro();
-    document.getElementById('opzioni3').style.display = 'block';
-}
-
-
-function mostraRicette() {
-    nascondiTutto();
-    document.getElementById('tabella-container').style.display = 'block';
-    caricaTabellaRicetta();
-    document.getElementById('opzioni2').style.display = 'block';
-}
-
-function mostraFormLibro() {
-    nascondiTutto();
-    document.getElementById('form-libro-container').style.display = 'block';
-    document.getElementById('nuovoISBN').focus();
-
-    const gruppi = document.querySelectorAll('.options-group');
-    gruppi.forEach(gruppo => {
-        gruppo.style.display = 'none';
-    });
-}
-
-function nascondiTutto() {
-    document.getElementById('tabella-container').style.display = 'none';
-    document.getElementById('form-libro-container').style.display = 'none';
-    
-    // Nascondi tutte le tabelle
-    document.querySelectorAll('.tabella').forEach(tab => {
-        tab.style.display = 'none';
-    });
-}
-
-function annullaInserimento() {
-    document.getElementById('formNuovoLibro').reset();
-    mostraLibri();
-}
-
-// Gestione submit form nuovo libro
-document.getElementById('formNuovoLibro').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const isbn = document.getElementById('nuovoISBN').value;
-    const titolo = document.getElementById('nuovoTitolo').value;
-    const anno = document.getElementById('nuovoAnno').value;
-    
-    // Non inviare il campo pagine
-    fetch('php/inserisci_libro.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ isbn, titolo, anno }) // Rimuovi pagine
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Libro inserito con successo!');
-            document.getElementById('formNuovoLibro').reset();
-            
-            // Aggiorna i dati locali
-            const nuovoLibro = {
-                codISBN: isbn,
-                titolo: titolo,
-                anno: anno,
-                numeroPagine: 0, // Verrà calcolato dal server
-                numeroRicette: 0
-            };
-            
-            libriData.push(nuovoLibro);
-            mostraLibri();
-        } else {
-            alert('Errore: ' + data.message);
-        }
-    })
-    .catch(err => {
-        console.error('Errore:', err);
-        alert('Si è verificato un errore durante l\'inserimento');
+    // Gestione form nuovo libro
+    document.getElementById('formNuovoLibro').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const isbn = document.getElementById('nuovoISBN').value;
+        const titolo = document.getElementById('nuovoTitolo').value;
+        const anno = document.getElementById('nuovoAnno').value;
+        
+        fetch('php/inserisci_libro.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ isbn, titolo, anno })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Libro inserito con successo!');
+                document.getElementById('formNuovoLibro').reset();
+                
+                libriData.push({
+                    codISBN: isbn,
+                    titolo: titolo,
+                    anno: anno,
+                    numeroPagine: 0,
+                    numeroRicette: 0
+                });
+                
+                mostraLibri();
+            } else {
+                alert('Errore: ' + data.message);
+            }
+        })
+        .catch(err => {
+            console.error('Errore:', err);
+            alert('Si è verificato un errore durante l\'inserimento');
+        });
     });
 });
