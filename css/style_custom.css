@@ -1,0 +1,234 @@
+
+:root {
+    --verde-chiaro: #2ecc71;
+    --verde-medio: #27ae60;
+    --verde-scuro: #1e8449;
+    --bianco: #ffffff;
+    --verde-scurissimo: #0c4100c9;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+    min-height: 100vh;
+    font-family: 'Arial', sans-serif;
+    color: #103c22;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(to right, #2e7d32, #1b5e20);
+    color: white;
+    padding: 1.2rem 2rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.3rem;
+    transition: background 0.3s ease;
+}
+
+.header:hover {
+    background: linear-gradient(to right, #388e3c, #2e7d32);
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Main layout */
+.main {
+    display: flex;
+    flex: 1;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--verde-scurissimo);
+}
+
+.sfondo {
+    background-color: var(--verde-medio);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.box {
+    flex: 1;
+    background-color: var(--verde-chiaro);
+    color: white;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.grande {
+    padding: 15px;
+    flex: 3;
+}
+
+/* Tabella */
+.tabella {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    color: #103c22;
+    margin-top: 10px;
+    display: none;
+}
+
+.tabella th, .tabella td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.tabella th {
+    background-color: var(--verde-chiaro);
+    color: white;
+}
+
+.tabella tr:hover {
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.scroll-container {
+    max-height: calc(17 * 40px);
+    overflow-y: auto;
+}
+
+.tabella thead th {
+    position: sticky;
+    top: 0;
+    background-color: var(--verde-chiaro);
+    z-index: 1;
+}
+
+/* Menu laterale */
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.nav-button {
+    background-color: var(--verde-medio);
+    color: var(--bianco);
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-button:hover {
+    background-color: var(--verde-chiaro);
+    transform: translateY(-2px);
+}
+
+.nav-button:active {
+    transform: scale(0.98);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--verde-scuro);
+    color: var(--bianco);
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main {
+        flex-direction: column;
+    }
+
+    .logo {
+        text-align: center;
+    }
+
+    .nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .nav-button {
+        padding: 0.6rem 1rem;
+    }
+}
+
+/* Modal */
+.modale {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modale-contenuto {
+    background-color: var(--bianco);
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 80%;
+    max-width: 500px;
+    color: var(--verde-scurissimo);
+    position: relative;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal close */
+.chiudi {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.chiudi:hover {
+    color: var(--verde-scuro);
+}
+
+/* Focus accessibility */
+button:focus, input:focus, select:focus {
+    outline: 2px solid var(--verde-chiaro);
+    outline-offset: 2px;
+}
