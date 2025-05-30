@@ -13,6 +13,10 @@ function mostraOpzioni(id) {
 
     const tabelle = document.querySelectorAll('table');
     tabelle.forEach(tabella => tabella.style.display = 'none');
+    
+    document.getElementById('tabella-container').style.display = 'block';
+
+    document.getElementById('form-libro-container').style.display = 'none';
 
     if (id === 'opzioni1') {
         caricaTabellaRegione();
@@ -438,26 +442,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function mostraHome() {
     nascondiTutto();
-    document.getElementById('tabella-container').style.display = 'block';
-    // Qui puoi aggiungere logica per mostrare contenuto home se necessario
+    const gruppi = document.querySelectorAll('.options-group');
+    gruppi.forEach(gruppo => {
+        gruppo.style.display = 'none';
+    });
 }
 
 function mostraLibri() {
     nascondiTutto();
     document.getElementById('tabella-container').style.display = 'block';
     caricaTabellaLibro();
+    document.getElementById('opzioni3').style.display = 'block';
 }
+
 
 function mostraRicette() {
     nascondiTutto();
     document.getElementById('tabella-container').style.display = 'block';
     caricaTabellaRicetta();
+    document.getElementById('opzioni2').style.display = 'block';
 }
 
 function mostraFormLibro() {
     nascondiTutto();
     document.getElementById('form-libro-container').style.display = 'block';
     document.getElementById('nuovoISBN').focus();
+
+    const gruppi = document.querySelectorAll('.options-group');
+    gruppi.forEach(gruppo => {
+        gruppo.style.display = 'none';
+    });
 }
 
 function nascondiTutto() {

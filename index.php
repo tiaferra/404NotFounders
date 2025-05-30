@@ -20,23 +20,7 @@
  
    <main class="main">
         <div class="box sfondo">
-            <div class="box">Tabelle<br>
-                <form>
-                <p>Seleziona un'opzione:</p>
-                <label>
-                    <input type="radio" name="scelta" value="opzione1" onclick="mostraOpzioni('opzioni1')">
-                    Regione
-                </label><br>
-                <label>
-                    <input type="radio" name="scelta" value="opzione2" onclick="mostraOpzioni('opzioni2')">
-                    Ricetta
-                </label><br>
-                <label>
-                    <input type="radio" name="scelta" value="opzione3" onclick="mostraOpzioni('opzioni3')">
-                   Libro
-                </label>
-                </form>
-
+            <div class="box">
                 <div id="opzioni1" class="options-group">
                     <h3>Filtra per nome:</h3>
                     <input type="text" id="filtroRegione" placeholder="Cerca regione..." oninput="filtraRegioni()">
@@ -152,15 +136,40 @@
 
          <div class="box sfondo grande">
             <div class="box grande" id="contenuto-dinamico">
-                <div id="tabella-container" style="display:block;">
-                    <div class="scroll-container">
-                        <table id="tabellaRegione" class="tabella" style="display:none;"></table>
-                        <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
-                        <table id="tabellaLibro" class="tabella" style="display:none;"></table>
+                <div style="display:block;">
+                    <div id="tabella-container">
+                        <div class="scroll-container">
+                            <table id="tabellaRegione" class="tabella" style="display:none;"></table>
+                            <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
+                            <table id="tabellaLibro" class="tabella" style="display:none;"></table>
+                        </div>
+                    </div>
+                    <div id="form-libro-container">
+                        <h2>Inserisci Nuovo Libro</h2>
+                        <form id="formNuovoLibro">
+                            <div class="form-riga">
+                                <label for="nuovoISBN">ISBN:</label>
+                                <input type="text" id="nuovoISBN" name="isbn" required maxlength="13">
+                            </div>
+                            
+                            <div class="form-riga">
+                                <label for="nuovoTitolo">Titolo:</label>
+                                <input type="text" id="nuovoTitolo" name="titolo" required>
+                            </div>
+                            
+                            <div class="form-riga">
+                                <label for="nuovoAnno">Anno di pubblicazione:</label>
+                                <input type="number" id="nuovoAnno" name="anno" min="1900" max="2099" required>
+                            </div> 
+                            <div class="form-azioni">
+                                <button type="submit" class="nav-button">Salva Libro</button>
+                                <button type="button" class="nav-button" onclick="annullaInserimento()">Annulla</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 
-                <div id="form-libro-container" style="display:none;">
+         <!--       <div id="form-libro-container" style="display:none;">
                     <h2>Inserisci Nuovo Libro</h2>
                     <form id="formNuovoLibro">
                         <div class="form-riga">
@@ -182,16 +191,17 @@
                             <button type="button" class="nav-button" onclick="annullaInserimento()">Annulla</button>
                         </div>
                     </form>
-                </div>
+                </div>//-->
             </div>
         </div>
 
-        <<div class="box sfondo">
+        <div class="box sfondo">
             <div class="box">Menu <br/>
                 <nav class="nav">
                     <a href="#" class="nav-button" onclick="mostraHome()">Home</a>
-                    <a href="#" class="nav-button" onclick="mostraLibri()">Libri</a>
-                    <a href="#" class="nav-button" onclick="mostraRicette()">Ricette</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni1')">Regioni</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni2')">Ricette</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni3')">Libri</a>
                     <a href="#" class="nav-button" onclick="mostraFormLibro()">Nuovo Libro</a>
                 </nav>
             </div>
