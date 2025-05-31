@@ -134,7 +134,7 @@
             </div>
         </div>
 
-         <div class="box sfondo grande">
+        <div class="box sfondo grande">
             <div class="box grande" id="contenuto-dinamico">
                 <div style="display:block;">
                     <div id="tabella-container">

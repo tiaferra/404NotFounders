@@ -41,14 +41,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-radius: 8px;
             font-family: 'Segoe UI', sans-serif;
             font-size: 1.3rem;
             transition: background 0.3s ease;
-        }
-
-        .header:hover {
-            background: linear-gradient(to right, #388e3c, #2e7d32);
         }
 
         
@@ -69,8 +64,8 @@
         
         .sfondo {
             background-color: var(--verde-medio);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 1rem;
+            border-radius: 1rem;
             display: flex;
             flex-direction: column;
         }
@@ -79,8 +74,8 @@
             flex: 1;
             background-color: var(--verde-chiaro);
             color: white;
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -113,8 +108,11 @@
             border-collapse: collapse;
             background-color: white;
             color: #103c22;
-            margin-top: 10px;
+            margin-top: 1rem;
             display: none;
+            font-family: 'Segoe UI', sans-serif; /* Font leggibile e moderno */
+            font-size: 1rem; /* Equivale a 16px se il root è 16px */
+            line-height: 1.5;
             
         }
         
@@ -122,6 +120,9 @@
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
+            font-size: 1rem; /* Coerente con il resto della tabella */
+            font-family: inherit; /* Inerita il font dal genitore (.tabella) */
+            padding: 0.5rem; /* Padding coerente con le unità rem */
         }
         
         .tabella th {
@@ -133,7 +134,7 @@
            background-color: rgba(46, 204, 113, 0.1);
         }
         .scroll-container {
-            max-height: calc(17 * 40px);
+            max-height: 70vh;
             overflow-y: auto;
         }
         .tabella thead th {
@@ -375,7 +376,7 @@
 
 .btn-azione {
     padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 0px;
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
@@ -432,4 +433,16 @@
     justify-content: center;
     gap: 15px;
     margin-top: 25px;
+}
+
+@media (min-width: 1200px) {
+    body {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .main {
+        flex-direction: column;
+    }
 }
