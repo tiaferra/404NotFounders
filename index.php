@@ -140,7 +140,19 @@
                     <div id="tabella-container">
                         <div class="scroll-container">
                             <table id="tabellaRegione" class="tabella" style="display:none;"></table>
-                            <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
+                            <table id="tabellaRicetta" class="tabella" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th>Numero</th>
+                                        <th>Tipo</th>
+                                        <th>Titolo</th>
+                                        <th>Azioni</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Content will be populated dynamically -->
+                                </tbody>
+                            </table>
                             <table id="tabellaLibro" class="tabella" style="display:none;"></table>
                         </div>
                     </div>
@@ -211,6 +223,13 @@
                     <button type="button" class="nav-button btn-elimina" id="btnEliminaLibro">Elimina Libro</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div id="modaleDettaglioRicetta" class="modale">
+        <div class="modale-contenuto" style="max-width: 600px;">
+            <span class="chiudi" onclick="chiudiModaleRicetta()">&times;</span>
+            <h2>Dettagli Ricetta</h2>
+            <div id="dettaglio-ricetta-content" style="max-height: 70vh; overflow-y: auto;"></div>
         </div>
     </div>
 </body>

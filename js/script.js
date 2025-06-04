@@ -72,17 +72,28 @@ function mostraTabella(data, colonne, idTabella) {
 
     // Intestazione
     const headerRow = document.createElement("tr");
-    colonne.forEach(col => {
-        const th = document.createElement("th");
-        th.textContent = col;
-        headerRow.appendChild(th);
-    });
+    
+    if (idTabella === 'tabellaRicetta') {
+        // Special header for recipes
+        ['Numero', 'Tipo', 'Titolo', 'Azioni'].forEach(col => {
+            const th = document.createElement("th");
+            th.textContent = col;
+            headerRow.appendChild(th);
+        });
+    } else {
+        // Standard header for other tables
+        colonne.forEach(col => {
+            const th = document.createElement("th");
+            th.textContent = col;
+            headerRow.appendChild(th);
+        });
 
-    // Aggiungi colonna azioni per la tabella libri
-    if (idTabella === 'tabellaLibro') {
-        const azioniHeader = document.createElement("th");
-        azioniHeader.textContent = "Azioni";
-        headerRow.appendChild(azioniHeader);
+        // Aggiungi colonna azioni per la tabella libri
+        if (idTabella === 'tabellaLibro') {
+            const azioniHeader = document.createElement("th");
+            azioniHeader.textContent = "Azioni";
+            headerRow.appendChild(azioniHeader);
+        }
     }
 
     tabella.appendChild(headerRow);
@@ -91,30 +102,60 @@ function mostraTabella(data, colonne, idTabella) {
     data.forEach(riga => {
         const row = document.createElement("tr");
         
-        colonne.forEach(col => {
-            const cell = document.createElement("td");
-            cell.textContent = riga[col] || 'N/A';
-            row.appendChild(cell);
-        });
-
-        // Aggiungi pulsanti azione per i libri
-        if (idTabella === 'tabellaLibro') {
+        if (idTabella === 'tabellaRicetta') {
+            // Special handling for recipe table
+            
+            // Number
+            const cellNum = document.createElement("td");
+            cellNum.textContent = riga.numero;
+            row.appendChild(cellNum);
+            
+            // Type
+            const cellType = document.createElement("td");
+            cellType.textContent = riga.tipo;
+            row.appendChild(cellType);
+            
+            // Title
+            const cellTitle = document.createElement("td");
+            cellTitle.textContent = riga.titolo;
+            row.appendChild(cellTitle);
+            
+            // Actions
             const azioniCell = document.createElement("td");
-            azioniCell.className = "azioni-cell";
-            
-            const btnModifica = document.createElement("button");
-            btnModifica.textContent = "Modifica";
-            btnModifica.className = "btn-azione btn-modifica";
-            btnModifica.onclick = () => apriModaleModificaLibro(riga);
-            
-            const btnElimina = document.createElement("button");
-            btnElimina.textContent = "Elimina";
-            btnElimina.className = "btn-azione btn-elimina-tabella";
-            btnElimina.onclick = () => eliminaLibro(riga.codISBN);
-            
-            azioniCell.appendChild(btnModifica);
-            azioniCell.appendChild(btnElimina);
+            const btnView = document.createElement("button");
+            btnView.textContent = "Dettagli";
+            btnView.className = "btn-azione btn-view";
+            btnView.onclick = () => mostraDettaglioRicetta(riga);
+            azioniCell.appendChild(btnView);
             row.appendChild(azioniCell);
+            
+        } else {
+            // Standard handling for other tables
+            colonne.forEach(col => {
+                const cell = document.createElement("td");
+                cell.textContent = riga[col] || 'N/A';
+                row.appendChild(cell);
+            });
+
+            // Aggiungi pulsanti azione per i libri
+            if (idTabella === 'tabellaLibro') {
+                const azioniCell = document.createElement("td");
+                azioniCell.className = "azioni-cell";
+                
+                const btnModifica = document.createElement("button");
+                btnModifica.textContent = "Modifica";
+                btnModifica.className = "btn-azione btn-modifica";
+                btnModifica.onclick = () => apriModaleModificaLibro(riga);
+                
+                const btnElimina = document.createElement("button");
+                btnElimina.textContent = "Elimina";
+                btnElimina.className = "btn-azione btn-elimina-tabella";
+                btnElimina.onclick = () => eliminaLibro(riga.codISBN);
+                
+                azioniCell.appendChild(btnModifica);
+                azioniCell.appendChild(btnElimina);
+                row.appendChild(azioniCell);
+            }
         }
         
         tabella.appendChild(row);
@@ -451,3 +492,88 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+function mostraDettaglioRicetta(ricetta) {
+    const contenuto = document.getElementById('dettaglio-ricetta-content');
+    
+    // Show loading message while fetching ingredients
+    contenuto.innerHTML = `
+        <div class="dettaglio-ricetta">
+            <h3>${ricetta.titolo}</h3>
+            
+            <div class="dettaglio-sezione">
+                <h4>Informazioni</h4>
+                <p><strong>Tipo:</strong> ${ricetta.tipo}</p>
+                <p><strong>Regioni:</strong> ${ricetta.regioni}</p>
+                <p><strong>Numero libri:</strong> ${ricetta.numeroLibri}</p>
+            </div>
+            
+            <div class="dettaglio-sezione">
+                <h4>Ingredienti</h4>
+                <p>Caricamento ingredienti...</p>
+            </div>
+            
+            <div class="dettaglio-sezione" style="grid-column: 1 / -1;">
+                <h4>Libri che contengono questa ricetta</h4>
+                <ul class="libri-lista">
+                    ${ricetta.titoliLibri.split(', ').map(libro => 
+                        `<li><a href="#" onclick="cercaLibroPerTitolo('${libro.trim()}'); return false;">${libro}</a></li>`
+                    ).join('')}
+                </ul>
+            </div>
+            
+            <button class="nav-button" onclick="chiudiModaleRicetta()" style="grid-column: 1 / -1; margin-top: 15px;">
+                Chiudi
+            </button>
+        </div>
+    `;
+    
+    document.getElementById('modaleDettaglioRicetta').style.display = 'block';
+    
+    // Fetch ingredients separately
+    fetch(`php/get_ingredienti.php?numero=${ricetta.numero}`)
+        .then(response => response.json())
+        .then(ingredienti => {
+            let ingredientiHtml = 'Dettagli ingredienti non disponibili';
+            
+            if (ingredienti.length > 0) {
+                ingredientiHtml = ingredienti.map(ing => 
+                    `• ${ing.ingrediente} - ${ing.quantità}`
+                ).join('<br>');
+            }
+            
+            // Update the ingredients section
+            const ingredientiElement = contenuto.querySelector('.dettaglio-sezione:nth-child(3) p');
+            ingredientiElement.innerHTML = ingredientiHtml;
+        })
+        .catch(err => {
+            console.error('Errore nel caricamento degli ingredienti:', err);
+            const ingredientiElement = contenuto.querySelector('.dettaglio-sezione:nth-child(3) p');
+            ingredientiElement.textContent = 'Errore nel caricamento degli ingredienti';
+        });
+}
+
+
+function chiudiModaleRicetta() {
+    document.getElementById('modaleDettaglioRicetta').style.display = 'none';
+}
+document.querySelectorAll('.chiudi').forEach(button => {
+    button.addEventListener('click', chiudiModaleRicetta);
+});
+
+window.addEventListener('click', (event) => {
+    const modaleRicetta = document.getElementById('modaleDettaglioRicetta');
+    if (event.target === modaleRicetta) {
+        chiudiModaleRicetta();
+    }
+});
+
+function cercaLibroPerTitolo(titolo) {
+    document.getElementById('filtroTitoloLibro').value = titolo;
+    mostraOpzioni('opzioni3');
+    caricaTabellaLibro();
+    filtraLibri();
+    chiudiModaleRicetta();
+    
+    // Scroll to the table
+    document.getElementById('tabella-container').scrollIntoView();
+}
