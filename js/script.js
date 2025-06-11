@@ -71,7 +71,8 @@ function mostraTabella(data, colonne, idTabella) {
     tabella.innerHTML = "";
 
     // Intestazione
-    const headerRow = document.createElement("tr");
+    const thead = document.createElement("thead");
+const headerRow = document.createElement("tr");
     
     if (idTabella === 'tabellaRicetta') {
         // Special header for recipes
@@ -96,7 +97,8 @@ function mostraTabella(data, colonne, idTabella) {
         }
     }
 
-    tabella.appendChild(headerRow);
+    thead.appendChild(headerRow);
+    tabella.appendChild(thead);
 
     // Popola i dati
     data.forEach(riga => {
