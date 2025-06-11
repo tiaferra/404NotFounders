@@ -86,7 +86,6 @@ function mostraTabella(data, colonne, idTabella) {
         };
 
     // Intestazione
-    const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
     
     if (idTabella === 'tabellaRicetta') {
