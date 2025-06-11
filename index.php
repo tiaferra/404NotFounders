@@ -185,7 +185,7 @@
         </div>
 
         <div class="box sfondo">
-            <div class="box">Menu <br/>
+            <div class="box"> <br/>
                 <nav class="nav">
                     <a href="#" class="nav-button" onclick="mostraHome()">Home</a>
                     <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni1')">Regioni</a>
