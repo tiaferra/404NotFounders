@@ -181,7 +181,7 @@ function caricaTabellaRegione() {
         mostraTabella(regioniData, ['nome'], 'tabellaRegione');
     }
 }
-
+ 
 function caricaTabellaRicetta() {
     caricaRegioniPerRicette();
     caricaLibriPerRicette();
