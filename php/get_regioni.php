@@ -1,7 +1,19 @@
 <?php
 include 'conn.php';
 
-$sql = "SELECT /*cod,*/ nome FROM Regione";
+$sql = "SELECT
+    R.nome AS nome,
+    COUNT(RR.ricetta) AS NumeroRicette
+FROM
+    Regione AS R
+JOIN
+    RicettaRegionale AS RR
+ON
+    R.cod = RR.regione
+GROUP BY
+    R.nome
+ORDER BY
+    nome ASC;";
 $result = $conn->query($sql);
 
 $regioni = array();

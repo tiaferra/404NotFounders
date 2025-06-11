@@ -73,7 +73,8 @@ function mostraTabella(data, colonne, idTabella) {
         //modifica i nomi degli header delle tabelle
         const headerLabelsPerTabella = {
             tabellaRegione: {
-                nome: "Nome Regione"
+                nome: "Nome Regione",
+                NumeroRicette: "Ricette Regionali"
             },
 
             tabellaLibro: {
@@ -174,11 +175,11 @@ function caricaTabellaRegione() {
             .then(res => res.json())
             .then(data => {
                 regioniData = data;
-                mostraTabella(data, ['nome'], 'tabellaRegione');
+                mostraTabella(data, ['nome', 'NumeroRicette'], 'tabellaRegione');
             })
             .catch(err => console.error("Errore caricamento Regioni:", err));
     } else {
-        mostraTabella(regioniData, ['nome'], 'tabellaRegione');
+        mostraTabella(regioniData, ['nome', 'NumeroRicette'], 'tabellaRegione');
     }
 }
 
