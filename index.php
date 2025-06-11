@@ -198,7 +198,7 @@
     </main>
   
     <footer class="footer">
-        footer
+        Ricettario 404 Not Founders
     </footer>
 
     <div id="modaleModificaLibro" class="modale">
