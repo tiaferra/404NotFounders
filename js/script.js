@@ -86,6 +86,7 @@ function mostraTabella(data, colonne, idTabella) {
         };
 
     // Intestazione
+    const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
     
     if (idTabella === 'tabellaRicetta') {
@@ -406,7 +407,7 @@ function eliminaLibro(isbn) {
         })
         .catch(err => {
             console.error("Errore eliminazione libro:", err);
-            alert('Si è verificato un errore durante l\'eliminazione');
+            alert('Si Ã¨ verificato un errore durante l\'eliminazione');
         });
 }
 
@@ -439,7 +440,7 @@ function salvaModificheLibro(e) {
     })
     .catch(err => {
         console.error("Errore modifica libro:", err);
-        alert('Si è verificato un errore durante il salvataggio');
+        alert('Si Ã¨ verificato un errore durante il salvataggio');
     });
 }
 
@@ -507,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(err => {
             console.error('Errore:', err);
-            alert('Si è verificato un errore durante l\'inserimento');
+            alert('Si Ã¨ verificato un errore durante l\'inserimento');
         });
     });
 });
@@ -556,7 +557,7 @@ function mostraDettaglioRicetta(ricetta) {
             
             if (ingredienti.length > 0) {
                 ingredientiHtml = ingredienti.map(ing => 
-                    `• ${ing.ingrediente} - ${ing.quantità}`
+                    `â€¢ ${ing.ingrediente} - ${ing.quantitÃ }`
                 ).join('<br>');
             }
             
