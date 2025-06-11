@@ -160,21 +160,12 @@ function mostraTabella(data, colonne, idTabella) {
             // Aggiungi pulsanti azione per i libri
             if (idTabella === 'tabellaLibro') {
                 const azioniCell = document.createElement("td");
-                azioniCell.className = "azioni-cell";
-                
-                const btnModifica = document.createElement("button");
-                btnModifica.textContent = "Modifica";
-                btnModifica.className = "btn-azione btn-modifica";
-                btnModifica.onclick = () => apriModaleModificaLibro(riga);
-                
-                const btnElimina = document.createElement("button");
-                btnElimina.textContent = "Elimina";
-                btnElimina.className = "btn-azione btn-elimina-tabella";
-                btnElimina.onclick = () => eliminaLibro(riga.codISBN);
-                
-                azioniCell.appendChild(btnModifica);
-                azioniCell.appendChild(btnElimina);
-                row.appendChild(azioniCell);
+    const btnDettagli = document.createElement("button");
+    btnDettagli.textContent = "Dettagli";
+    btnDettagli.className = "btn-azione btn-view";
+    btnDettagli.onclick = () => mostraDettaglioLibro(riga);
+    azioniCell.appendChild(btnDettagli);
+    row.appendChild(azioniCell);
             }
         }
         
@@ -401,6 +392,8 @@ function eliminaLibro(isbn) {
                 libriData = libriData.filter(libro => libro.codISBN !== isbn);
                 mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
                 alert('Libro eliminato con successo!');
+                chiudiModaleLibro();
+                document.getElementById('modaleModificaLibro').style.display = 'none';
             } else {
                 alert('Errore durante l\'eliminazione: ' + data.message);
             }
@@ -536,7 +529,7 @@ function mostraDettaglioRicetta(ricetta) {
                 <h4>Libri che contengono questa ricetta</h4>
                 <ul class="libri-lista">
                     ${ricetta.titoliLibri.split(', ').map(libro => 
-                        `<li><a href="#" onclick="cercaLibroPerTitolo('${libro.trim()}'); return false;">${libro}</a></li>`
+                        `<li><a href="#" onclick="cercaLibroPerTitolo('${libro.trim()}'); chiudiModaleRicetta(); return false;">${libro}</a></li>`
                     ).join('')}
                 </ul>
             </div>
@@ -585,6 +578,11 @@ window.addEventListener('click', (event) => {
     if (event.target === modaleRicetta) {
         chiudiModaleRicetta();
     }
+
+    const modaleDettaglioLibro = document.getElementById('modaleDettaglioLibro');
+    if (event.target === modaleDettaglioLibro) {
+        chiudiModaleLibro();
+    }
 });
 
 function cercaLibroPerTitolo(titolo) {
@@ -596,4 +594,62 @@ function cercaLibroPerTitolo(titolo) {
     
     // Scroll to the table
     document.getElementById('tabella-container').scrollIntoView();
+}
+
+function mostraDettaglioLibro(libro) {
+    const contenuto = document.getElementById('dettaglio-libro-content');
+    
+    contenuto.innerHTML = `
+        <div class="dettaglio-libro">
+            <h3>${libro.titolo}</h3>
+            <p><strong>ISBN:</strong> ${libro.codISBN}</p>
+            <p><strong>Anno:</strong> ${libro.anno}</p>
+            <p><strong>Pagine:</strong> ${libro.numeroPagine}</p>
+            <p><strong>Ricette:</strong> ${libro.numeroRicette}</p>
+
+            <div class="dettaglio-sezione">
+                <h4>Ricette contenute</h4>
+                <div id="ricette-libro">Caricamento ricette...</div>
+            </div>
+            
+            <div class="form-azioni">
+                <button class="nav-button" onclick="apriModaleModificaLibro(${JSON.stringify(libro).replace(/"/g, '&quot;')})">Modifica</button>
+                <button class="nav-button btn-elimina" onclick="eliminaLibro('${libro.codISBN}')">Elimina</button>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('modaleDettaglioLibro').style.display = 'block';
+    
+    // Carica le ricette del libro
+    fetch(`php/get_ricette_libro.php?isbn=${libro.codISBN}`)
+        .then(response => response.json())
+        .then(ricette => {
+            let ricetteHtml = 'Nessuna ricetta presente.';
+            if (ricette.length > 0) {
+                ricetteHtml = '<ul class="ricette-lista">';
+                ricette.forEach(ric => {
+                    ricetteHtml += `<li><a href="#" onclick="mostraDettaglioRicetta(${JSON.stringify(ric).replace(/"/g, '&quot;')}); return false;">${ric.titolo} (${ric.tipo})</a></li>`;
+                });
+                ricetteHtml += '</ul>';
+            }
+            document.getElementById('ricette-libro').innerHTML = ricetteHtml;
+        })
+        .catch(err => {
+            console.error('Errore nel caricamento delle ricette:', err);
+            document.getElementById('ricette-libro').innerHTML = 'Errore nel caricamento delle ricette.';
+        });
+}
+
+function chiudiModaleLibro() {
+    document.getElementById('modaleDettaglioLibro').style.display = 'none';
+}
+
+function cercaLibroPerISBN(isbn) {
+    const libro = libriData.find(l => l.codISBN === isbn);
+    if (libro) {
+        mostraDettaglioLibro(libro);
+    } else {
+        alert('Libro non trovato!');
+    }
 }

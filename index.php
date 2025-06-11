@@ -232,5 +232,12 @@
             <div id="dettaglio-ricetta-content" style="max-height: 70vh; overflow-y: auto;"></div>
         </div>
     </div>
+    <div id="modaleDettaglioLibro" class="modale">
+    <div class="modale-contenuto" style="max-width: 600px;">
+        <span class="chiudi" onclick="chiudiModaleLibro()">&times;</span>
+        <h2>Dettagli Libro</h2>
+        <div id="dettaglio-libro-content" style="max-height: 70vh; overflow-y: auto;"></div>
+    </div>
+</div>
 </body>
 </html>
