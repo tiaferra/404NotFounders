@@ -166,7 +166,7 @@
         }
         
         /* Footer */
-        .footer {
+        .footer { 
             background-color: var(--verde-scuro);
             color: var(--bianco);
             padding: 1rem;
