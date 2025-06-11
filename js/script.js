@@ -606,7 +606,7 @@ function mostraDettaglioLibro(libro) {
             </div>
             
             <div class="form-azioni">
-                <button class="nav-button" onclick="apriModaleModificaLibro(${JSON.stringify(libro).replace(/"/g, '&quot;')})">Modifica</button>
+                <button class="nav-button" onclick="apriModaleModificaLibro(${JSON.stringify(libro).replace(/"/g, '&quot;')});chiudiModaleLibro()">Modifica</button>
                 <button class="nav-button btn-elimina" onclick="eliminaLibro('${libro.codISBN}')">Elimina</button>
             </div>
         </div>
