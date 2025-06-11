@@ -544,7 +544,7 @@ function mostraDettaglioRicetta(ricetta) {
             
             if (ingredienti.length > 0) {
                 ingredientiHtml = ingredienti.map(ing => 
-                    `Ã¢â‚¬Â¢ ${ing.ingrediente} - ${ing.quantitÃƒ }`
+                    `${ing.ingrediente} - ${ing.quantità }`
                 ).join('<br>');
             }
             
@@ -610,6 +610,7 @@ function mostraDettaglioLibro(libro) {
                 <button class="nav-button" onclick="apriModaleModificaLibro(${JSON.stringify(libro).replace(/"/g, '&quot;')});chiudiModaleLibro()">Modifica</button>
                 <button class="nav-button btn-elimina" onclick="eliminaLibro('${libro.codISBN}')">Elimina</button>
             </div>
+
         </div>
     `;
     
