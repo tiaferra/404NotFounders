@@ -70,9 +70,23 @@ function mostraTabella(data, colonne, idTabella) {
     const tabella = document.getElementById(idTabella);
     tabella.innerHTML = "";
 
+        //modifica i nomi degli header delle tabelle
+        const headerLabelsPerTabella = {
+            tabellaRegione: {
+                nome: "Nome Regione"
+            },
+
+            tabellaLibro: {
+                codISBN: "ISBN",
+                titolo: "Titolo",
+                anno: "Anno",
+                numeroPagine: "Pagine",
+                numeroRicette: "Ricette"
+            }
+        };
+
     // Intestazione
-    const thead = document.createElement("thead");
-const headerRow = document.createElement("tr");
+    const headerRow = document.createElement("tr");
     
     if (idTabella === 'tabellaRicetta') {
         // Special header for recipes
@@ -82,10 +96,13 @@ const headerRow = document.createElement("tr");
             headerRow.appendChild(th);
         });
     } else {
+        //crea costante per header delle tabelle
+        const labels = headerLabelsPerTabella[idTabella] || {};
+
         // Standard header for other tables
         colonne.forEach(col => {
             const th = document.createElement("th");
-            th.textContent = col;
+            th.textContent = labels[col] || col;
             headerRow.appendChild(th);
         });
 
@@ -172,11 +189,11 @@ function caricaTabellaRegione() {
             .then(res => res.json())
             .then(data => {
                 regioniData = data;
-                mostraTabella(data, ['cod', 'nome'], 'tabellaRegione');
+                mostraTabella(data, ['nome'], 'tabellaRegione');
             })
             .catch(err => console.error("Errore caricamento Regioni:", err));
     } else {
-        mostraTabella(regioniData, ['cod', 'nome'], 'tabellaRegione');
+        mostraTabella(regioniData, ['nome'], 'tabellaRegione');
     }
 }
 
