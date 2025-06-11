@@ -182,7 +182,7 @@ function caricaTabellaRegione() {
         mostraTabella(regioniData, ['nome', 'NumeroRicette'], 'tabellaRegione');
     }
 }
-
+ 
 function caricaTabellaRicetta() {
     caricaRegioniPerRicette();
     caricaLibriPerRicette();
