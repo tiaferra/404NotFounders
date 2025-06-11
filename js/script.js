@@ -78,10 +78,8 @@ function mostraTabella(data, colonne, idTabella) {
 
             tabellaLibro: {
                 codISBN: "ISBN",
-                titolo: "Titolo",
-                anno: "Anno",
-                numeroPagine: "Pagine",
-                numeroRicette: "Ricette"
+                titolo: "Titolo del Libro",
+                anno: "Anno di Pubblicazione"
             }
         };
 
@@ -91,7 +89,7 @@ function mostraTabella(data, colonne, idTabella) {
     
     if (idTabella === 'tabellaRicetta') {
         // Special header for recipes
-        ['Numero', 'Tipo', 'Titolo', 'Azioni'].forEach(col => {
+        ['Nome Ricetta','Tipo di Portata', 'Azioni'].forEach(col => {
             const th = document.createElement("th");
             th.textContent = col;
             headerRow.appendChild(th);
@@ -124,21 +122,16 @@ function mostraTabella(data, colonne, idTabella) {
         
         if (idTabella === 'tabellaRicetta') {
             // Special handling for recipe table
-            
-            // Number
-            const cellNum = document.createElement("td");
-            cellNum.textContent = riga.numero;
-            row.appendChild(cellNum);
-            
-            // Type
-            const cellType = document.createElement("td");
-            cellType.textContent = riga.tipo;
-            row.appendChild(cellType);
-            
-            // Title
+
+             // Title
             const cellTitle = document.createElement("td");
             cellTitle.textContent = riga.titolo;
             row.appendChild(cellTitle);
+
+            // Type
+            const cellType = document.createElement("td");
+            cellType.textContent = riga.tipo;
+            row.appendChild(cellType);           
             
             // Actions
             const azioniCell = document.createElement("td");
@@ -198,11 +191,11 @@ function caricaTabellaRicetta() {
             .then(res => res.json())
             .then(data => {
                 ricetteData = data;
-                mostraTabella(data, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+                mostraTabella(data, ['titolo', 'tipo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
             })
             .catch(err => console.error("Errore caricamento Ricette:", err));
     } else {
-        mostraTabella(ricetteData, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+        mostraTabella(ricetteData, ['titolo','tipo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
     }
 }
 
@@ -214,12 +207,12 @@ function caricaTabellaLibro() {
             .then(res => res.json())
             .then(data => {
                 libriData = data;
-                mostraTabella(data, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+                mostraTabella(data, ['codISBN', 'titolo', 'anno'], 'tabellaLibro');
                 popolaDropdownAnni();
             })
             .catch(err => console.error("Errore caricamento Libri:", err));
     } else {
-        mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+        mostraTabella(libriData, ['codISBN', 'titolo', 'anno'], 'tabellaLibro');
         popolaDropdownAnni();
     }
 }
