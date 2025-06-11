@@ -1,7 +1,7 @@
 <?php
 include 'conn.php';
 
-$sql = "SELECT cod, nome FROM Regione";
+$sql = "SELECT /*cod,*/ nome FROM Regione";
 $result = $conn->query($sql);
 
 $regioni = array();
