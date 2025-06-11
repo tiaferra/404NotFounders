@@ -73,7 +73,8 @@ function mostraTabella(data, colonne, idTabella) {
         //modifica i nomi degli header delle tabelle
         const headerLabelsPerTabella = {
             tabellaRegione: {
-                nome: "Nome Regione"
+                nome: "Nome Regione",
+                NumeroRicette: "Ricette Regionali"
             },
 
             tabellaLibro: {
@@ -174,11 +175,11 @@ function caricaTabellaRegione() {
             .then(res => res.json())
             .then(data => {
                 regioniData = data;
-                mostraTabella(data, ['nome'], 'tabellaRegione');
+                mostraTabella(data, ['nome', 'NumeroRicette'], 'tabellaRegione');
             })
             .catch(err => console.error("Errore caricamento Regioni:", err));
     } else {
-        mostraTabella(regioniData, ['nome'], 'tabellaRegione');
+        mostraTabella(regioniData, ['nome', 'NumeroRicette'], 'tabellaRegione');
     }
 }
  
@@ -393,7 +394,7 @@ function eliminaLibro(isbn) {
         })
         .catch(err => {
             console.error("Errore eliminazione libro:", err);
-            alert('Si Ã¨ verificato un errore durante l\'eliminazione');
+            alert('Si ÃƒÂ¨ verificato un errore durante l\'eliminazione');
         });
 }
 
@@ -426,7 +427,7 @@ function salvaModificheLibro(e) {
     })
     .catch(err => {
         console.error("Errore modifica libro:", err);
-        alert('Si Ã¨ verificato un errore durante il salvataggio');
+        alert('Si ÃƒÂ¨ verificato un errore durante il salvataggio');
     });
 }
 
@@ -494,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(err => {
             console.error('Errore:', err);
-            alert('Si Ã¨ verificato un errore durante l\'inserimento');
+            alert('Si ÃƒÂ¨ verificato un errore durante l\'inserimento');
         });
     });
 });
@@ -543,7 +544,7 @@ function mostraDettaglioRicetta(ricetta) {
             
             if (ingredienti.length > 0) {
                 ingredientiHtml = ingredienti.map(ing => 
-                    `â€¢ ${ing.ingrediente} - ${ing.quantitÃ }`
+                    `Ã¢â‚¬Â¢ ${ing.ingrediente} - ${ing.quantitÃƒ }`
                 ).join('<br>');
             }
             
