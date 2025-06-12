@@ -1,7 +1,7 @@
 <?php
 include 'conn.php';
 
-$sql = "SELECT
+$sql = "SELECT cod,
     R.nome AS nome,
     COUNT(RR.ricetta) AS NumeroRicette
 FROM

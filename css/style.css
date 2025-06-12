@@ -601,3 +601,97 @@
     gap: 10px;
     margin-top: 20px;
 }
+
+/* Aggiungi questi stili */
+.dettaglio-regione {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.dettaglio-regione h3 {
+    color: var(--verde-scuro);
+    border-bottom: 2px solid var(--verde-medio);
+    padding-bottom: 10px;
+}
+
+/* Aggiungi questo */
+.btn-azione {
+    padding: 5px 10px;
+    border-radius: 4px; /* Aggiungi bordi arrotondati */
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.btn-view {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #2980b9;
+}
+
+/* Aggiungi questi nuovi stili */
+.notifica {
+    position: fixed;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    z-index: 10000;
+    transition: top 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.notifica.mostra {
+    top: 20px;
+    opacity: 1;
+}
+
+.notifica-successo {
+    background-color: var(--verde-scuro);
+}
+
+.notifica-errore {
+    background-color: #e74c3c;
+}
+
+/* Stile per i link nelle tabelle */
+.tabella a {
+    color: var(--verde-scuro);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.tabella a:hover {
+    color: var(--verde-scurissimo);
+    text-decoration: underline;
+}
+
+/* Miglioramenti alla tabella */
+.tabella tr {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.tabella tr:hover {
+    background-color: rgba(46, 204, 113, 0.15) !important;
+}
+
+/* Pulsante indietro */
+#backButton {
+    margin-bottom: 15px;
+    background-color: #3498db;
+}
+
+#backButton:hover {
+    background-color: #2980b9;
+}

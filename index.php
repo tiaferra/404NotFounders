@@ -188,9 +188,9 @@
             <div class="box"> <br/>
                 <nav class="nav">
                     <a href="#" class="nav-button" onclick="mostraHome()">Home</a>
-                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni1')">Regioni</a>
-                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni2')">Ricette</a>
                     <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni3')">Libri</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni2')">Ricette</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni1')">Regioni</a>
                     <a href="#" class="nav-button" onclick="mostraFormLibro()">Nuovo Libro</a>
                 </nav>
             </div>
@@ -199,6 +199,7 @@
   
     <footer class="footer">
         Ricettario 404 Not Founders
+        <span id="breadcrumb"></span>
     </footer>
 
     <div id="modaleModificaLibro" class="modale">
@@ -233,10 +234,17 @@
         </div>
     </div>
     <div id="modaleDettaglioLibro" class="modale">
+        <div class="modale-contenuto" style="max-width: 600px;">
+            <span class="chiudi" onclick="chiudiModaleLibro()">&times;</span>
+            <h2>Dettagli Libro</h2>
+            <div id="dettaglio-libro-content" style="max-height: 70vh; overflow-y: auto;"></div>
+        </div>
+    </div>
+    <div id="modaleDettaglioRegione" class="modale">
     <div class="modale-contenuto" style="max-width: 600px;">
-        <span class="chiudi" onclick="chiudiModaleLibro()">&times;</span>
-        <h2>Dettagli Libro</h2>
-        <div id="dettaglio-libro-content" style="max-height: 70vh; overflow-y: auto;"></div>
+        <span class="chiudi" onclick="chiudiModaleRegione()">&times;</span>
+        <h2>Dettagli Regione</h2>
+        <div id="dettaglio-regione-content" style="max-height: 70vh; overflow-y: auto;"></div>
     </div>
 </div>
 </body>
