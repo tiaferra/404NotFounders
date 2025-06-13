@@ -15,7 +15,7 @@ LEFT JOIN Regione Reg ON RR.regione = Reg.cod
 LEFT JOIN RicettaPubblicata RP ON R.numero = RP.numeroRicetta
 LEFT JOIN Libro L ON RP.libro = L.codISBN
 GROUP BY R.numero
-ORDER BY R.numero";
+ORDER BY R.titolo, R.numero";
 
 $result = $conn->query($sql);
 

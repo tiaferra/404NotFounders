@@ -80,7 +80,7 @@ function mostraTabella(data, colonne, idTabella) {
     // Gestione speciale per la tabella Ricette
     if (idTabella === 'tabellaRicetta') {
         // Intestazione ricette (4 colonne)
-        ['Numero', 'Tipo', 'Titolo', 'Azioni'].forEach(col => {
+        ['Nome del Piatto', 'Tipologia di Portata', 'Azioni'].forEach(col => {
             const th = document.createElement("th");
             th.textContent = col;
             headerRow.appendChild(th);
@@ -125,16 +125,12 @@ function mostraTabella(data, colonne, idTabella) {
         if (idTabella === 'tabellaRicetta') {
             // Righe ricette (4 colonne)
             // 1. Numero
+            /*
             const cellNumero = document.createElement("td");
             cellNumero.textContent = riga.numero || 'N/A';
-            row.appendChild(cellNumero);
+            row.appendChild(cellNumero);*/
             
-            // 2. Tipo
-            const cellTipo = document.createElement("td");
-            cellTipo.textContent = riga.tipo || 'N/A';
-            row.appendChild(cellTipo);
-            
-            // 3. Titolo
+            // 2. Titolo
            const cellTitle = document.createElement("td");
             const titleLink = document.createElement("a");
             titleLink.href = "#";
@@ -145,6 +141,11 @@ function mostraTabella(data, colonne, idTabella) {
             };
             cellTitle.appendChild(titleLink);
             row.appendChild(cellTitle);
+
+            // 3. Tipo
+            const cellTipo = document.createElement("td");
+            cellTipo.textContent = riga.tipo || 'N/A';
+            row.appendChild(cellTipo);
             
             // 4. Azioni
             const azioniCell = document.createElement("td");
@@ -234,7 +235,7 @@ function caricaTabellaRicetta() {
             })
             .catch(err => console.error("Errore caricamento Ricette:", err));
     } else {
-        mostraTabella(ricetteData, ['titolo','tipo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+        mostraTabella(ricetteData, ['titolo', 'tipo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
     }
 }
 
