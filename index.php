@@ -137,22 +137,13 @@
         <div class="box sfondo grande">
             <div class="box grande" id="contenuto-dinamico">
                 <div style="display:block;">
+                    <div id="home-container" style="display:none;">
+                        ciao
+                    </div>
                     <div id="tabella-container">
                         <div class="scroll-container">
                             <table id="tabellaRegione" class="tabella" style="display:none;"></table>
-                            <table id="tabellaRicetta" class="tabella" style="display:none;">
-                                <thead>
-                                    <tr>
-                                        <th>Numero</th>
-                                        <th>Tipo</th>
-                                        <th>Titolo</th>
-                                        <th>Azioni</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Content will be populated dynamically -->
-                                </tbody>
-                            </table>
+                            <table id="tabellaRicetta" class="tabella" style="display:none;"></table>
                             <table id="tabellaLibro" class="tabella" style="display:none;"></table>
                         </div>
                     </div>
@@ -188,9 +179,9 @@
             <div class="box"> <br/>
                 <nav class="nav">
                     <a href="#" class="nav-button" onclick="mostraHome()">Home</a>
-                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni3')">Libri</a>
-                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni2')">Ricette</a>
-                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni1')">Regioni</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni3')">📚 Libri</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni2')">🍝 Ricette</a>
+                    <a href="#" class="nav-button" onclick="mostraOpzioni('opzioni1')">🗺️ Regioni</a>
                     <a href="#" class="nav-button" onclick="mostraFormLibro()">Nuovo Libro</a>
                 </nav>
             </div>

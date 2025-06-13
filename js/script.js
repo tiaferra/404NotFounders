@@ -9,6 +9,7 @@ let sortDirection = {}; // memorizza la direzione per ogni tabella/colonna
 
 // Funzioni di inizializzazione e gestione UI
 function mostraOpzioni(id) {
+    nascondiTutto();
     navigationStack = [];
     // Nascondi tutti i gruppi di opzioni
     document.querySelectorAll('.options-group').forEach(gruppo => {
@@ -36,11 +37,13 @@ function mostraOpzioni(id) {
 function nascondiTutto() {
     document.getElementById('form-libro-container').style.display = 'none';
     document.getElementById('tabella-container').style.display = 'none';
+    document.getElementById('home-container').style.display = 'none';
     document.querySelectorAll('.tabella').forEach(tab => tab.style.display = 'none');
 }
 
 function mostraHome() {
     nascondiTutto();
+    document.getElementById('home-container').style.display = 'block';
     document.querySelectorAll('.options-group').forEach(gruppo => gruppo.style.display = 'none');
 }
 
