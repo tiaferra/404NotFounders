@@ -138,7 +138,36 @@
             <div class="box grande" id="contenuto-dinamico">
                 <div style="display:block;">
                     <div id="home-container" style="display:none;">
-                        ciao
+                        <div id="home-content" class="home-content">
+    <div class="welcome-box">
+        <h1>🍽️ Benvenuto nel Ricettario 404!</h1>
+        <p>Gestisci la tua collezione di ricette e libri di cucina in modo semplice e intuitivo.</p>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>📚 Libri</h3>
+                <p>Cerca, modifica e aggiungi nuovi libri di cucina con informazioni complete</p>
+            </div>
+            <div class="feature">
+                <h3>🍲 Ricette</h3>
+                <p>Organizza le tue ricette per tipo, regione e libro di provenienza</p>
+            </div>
+            <div class="feature">
+                <h3>🗺️ Regioni</h3>
+                <p>Scopri le specialità culinarie regionali italiane</p>
+            </div>
+        </div>
+        
+        <div class="quick-start">
+            <h3>Come iniziare:</h3>
+            <ol>
+                <li>Clicca su "Nuovo Libro" per aggiungere un nuovo libro</li>
+                <li>Esplora le ricette usando i filtri nella sezione "Ricette"</li>
+                <li>Scopri le tradizioni culinarie nelle "Regioni"</li>
+            </ol>
+        </div>
+    </div>
+</div>
                     </div>
                     <div id="tabella-container">
                         <div class="scroll-container">

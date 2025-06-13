@@ -703,3 +703,64 @@
 #backButton:hover {
     background-color: #2980b9;
 }
+/* Stile per la home */
+.home-content {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.welcome-box {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 2rem;
+    max-width: 800px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    color: var(--verde-scurissimo);
+}
+
+.welcome-box h1 {
+    color: var(--verde-scuro);
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.feature {
+    background: rgba(46, 204, 113, 0.1);
+    padding: 1.2rem;
+    border-radius: 10px;
+    border-left: 4px solid var(--verde-medio);
+}
+
+.feature h3 {
+    color: var(--verde-scuro);
+    margin-bottom: 0.5rem;
+}
+
+.quick-start {
+    background: rgba(46, 204, 113, 0.05);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+
+.quick-start h3 {
+    color: var(--verde-scuro);
+    margin-bottom: 1rem;
+}
+
+.quick-start ol {
+    padding-left: 1.5rem;
+}
+
+.quick-start li {
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
+}
