@@ -577,13 +577,13 @@ function mostraDettaglioRicetta(ricetta) {
             </div>
             
             <div class="dettaglio-sezione" style="grid-column: 1 / -1;">
-                <h4>Libri che contengono questa ricetta</h4>
-                <ul class="libri-lista">
-                    ${ricetta.titoliLibri.split(', ').map(libro => 
-                        `<li><a href="#" onclick="cercaLibroPerTitolo('${libro.trim()}'); chiudiModaleRicetta(); return false;">${libro}</a></li>`
-                    ).join('')}
-                </ul>
-            </div>
+            <h4>Libri che contengono questa ricetta</h4>
+            <ul class="libri-lista">
+                ${ricetta.titoliLibri.split(', ').map(libro => 
+                    `<li><a href="#" onclick="cercaEVisualizzaLibroPerTitolo('${libro.trim()}'); return false;">${libro}</a></li>`
+                ).join('')}
+            </ul>
+        </div>
             
             <button class="nav-button" onclick="chiudiModaleRicetta()" style="grid-column: 1 / -1; margin-top: 15px;">
                 Chiudi
@@ -901,3 +901,24 @@ navigationStack = new Proxy([], {
         return result;
     }
 });
+
+function cercaEVisualizzaLibroPerTitolo(titoloLibro) {
+    const libro = libriData.find(l => l.titolo === titoloLibro);
+    
+    if (libro) {
+        chiudiModaleRicetta();
+        mostraDettaglioLibro(libro);
+    } else {
+        fetch(`php/cerca_libro_per_titolo.php?titolo=${encodeURIComponent(titoloLibro)}`)
+            .then(response => response.json())
+            .then(libro => {
+                if (libro) {
+                    chiudiModaleRicetta();
+                    mostraDettaglioLibro(libro);
+                } else {
+                    alert('Libro non trovato!');
+                }
+            })
+            .catch(err => console.error('Errore ricerca libro:', err));
+    }
+}
