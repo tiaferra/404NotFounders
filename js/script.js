@@ -3,6 +3,8 @@ let regioniData = [];
 let ricetteData = [];
 let libriData = [];
 let navigationStack = [];
+let sortDirection = {}; // memorizza la direzione per ogni tabella/colonna
+
 
 
 // Funzioni di inizializzazione e gestione UI
@@ -69,144 +71,119 @@ function annullaInserimento() {
 }
 
 // Funzioni per la gestione delle tabelle
-function mostraTabella(data, colonne, idTabella) {
+function mostraTabella(data, colonne, idTabella, colonneNascondi = []) {
     const tabella = document.getElementById(idTabella);
     tabella.innerHTML = "";
 
-    // Intestazione
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
 
-    // Gestione speciale per la tabella Ricette
-    if (idTabella === 'tabellaRicetta') {
-        // Intestazione ricette (4 colonne)
-        ['Nome del Piatto', 'Tipologia di Portata', 'Azioni'].forEach(col => {
-            const th = document.createElement("th");
-            th.textContent = col;
-            headerRow.appendChild(th);
-        });
-    } else {
-        // Intestazione standard per altre tabelle
-        const headerLabelsPerTabella = {
-            tabellaRegione: {
-                nome: "Nome Regione",
-                NumeroRicette: "Ricette Regionali"
-            },
-            tabellaLibro: {
-                codISBN: "ISBN",
-                titolo: "Titolo del Libro",
-                anno: "Anno di Pubblicazione"
-            }
-        };
-
-        const labels = headerLabelsPerTabella[idTabella] || {};
-        colonne.forEach(col => {
-            const th = document.createElement("th");
-            th.textContent = labels[col] || col;
-            headerRow.appendChild(th);
-        });
-
-        // Aggiungi colonna Azioni per Libri e Regioni
-        if (idTabella === 'tabellaLibro' || idTabella === 'tabellaRegione') {
-            const azioniHeader = document.createElement("th");
-            azioniHeader.textContent = "Azioni";
-            headerRow.appendChild(azioniHeader);
+    // Etichette intestazione
+    const headerLabelsPerTabella = {
+        tabellaRegione: {
+            nome: "Nome Regione",
+            NumeroRicette: "Ricette Regionali"
+        },
+        tabellaLibro: {
+            codISBN: "ISBN",
+            titolo: "Titolo del Libro",
+            anno: "Anno di Pubblicazione"
+        },
+        tabellaRicetta: {
+            numero: "Numero",
+            titolo: "Nome del Piatto",
+            tipo: "Tipologia di Portata",
+            regioni: "Regioni",
+            numeroLibri: "N° Libri",
+            titoliLibri: "Libri Associati"
         }
-    }
+    };
+
+    const labels = headerLabelsPerTabella[idTabella] || {};
+
+    let colIndexVisible = 0;
+    colonne.forEach((col, index) => {
+        if (colonneNascondi.includes(col)) return;
+        const currentIndex = colIndexVisible;
+
+        const th = document.createElement("th");
+        th.style.cursor = "pointer";
+        const defaultIcon = (colIndexVisible === 0) ? ' ▲' : '';
+        th.innerHTML = `${labels[col] || col} <span class="sort-icon">${defaultIcon}</span>`;
+        th.addEventListener("click", () => {
+            const tipo = col.toLowerCase().includes("anno") || col.toLowerCase().includes("numero") ? "numero" : "stringa";
+            ordinaTabellaDinamica(idTabella, currentIndex, tipo);
+        });
+        headerRow.appendChild(th);
+        colIndexVisible++;
+    });
+
+    // Colonna Azioni
+    const azioniTh = document.createElement("th");
+    azioniTh.textContent = "Azioni";
+    headerRow.appendChild(azioniTh);
 
     thead.appendChild(headerRow);
     tabella.appendChild(thead);
 
-    // Corpo tabella
     const tbody = document.createElement("tbody");
+
     data.forEach(riga => {
         const row = document.createElement("tr");
 
-        if (idTabella === 'tabellaRicetta') {
-            // Righe ricette (4 colonne)
-            // 1. Numero
-            /*
-            const cellNumero = document.createElement("td");
-            cellNumero.textContent = riga.numero || 'N/A';
-            row.appendChild(cellNumero);*/
-            
-            // 2. Titolo
-           const cellTitle = document.createElement("td");
-            const titleLink = document.createElement("a");
-            titleLink.href = "#";
-            titleLink.textContent = riga.titolo || 'N/A';
-            titleLink.onclick = (e) => {
-                e.preventDefault();
-                mostraDettaglioRicetta(riga);
-            };
-            cellTitle.appendChild(titleLink);
-            row.appendChild(cellTitle);
+        colonne.forEach(col => {
+            if (colonneNascondi.includes(col)) return;
 
-            // 3. Tipo
-            const cellTipo = document.createElement("td");
-            cellTipo.textContent = riga.tipo || 'N/A';
-            row.appendChild(cellTipo);
-            
-            // 4. Azioni
-            const azioniCell = document.createElement("td");
-            const btnView = document.createElement("button");
-            btnView.textContent = "Dettagli";
-            btnView.className = "btn-azione btn-view";
-            btnView.onclick = () => mostraDettaglioRicetta(riga);
-            azioniCell.appendChild(btnView);
-            row.appendChild(azioniCell);
-            
-        } else {
-            // Righe standard
-            colonne.forEach(col => {
-                const cell = document.createElement("td");
-                if (col === 'titolo' || col === 'nome') {
-                    const link = document.createElement("a");
-                    link.href = "#";
-                    link.textContent = riga[col] || 'N/A';
-                    link.onclick = (e) => {
-                        e.preventDefault();
-                        if (idTabella === 'tabellaLibro') {
-                            mostraDettaglioLibro(riga);
-                        } else if (idTabella === 'tabellaRegione') {
-                            mostraDettaglioRegione(riga);
-                        }
-                    };
-                    cell.appendChild(link);
-                } else {
-                    cell.textContent = riga[col] || 'N/A';
-                }
-                row.appendChild(cell);
-            });
+            const cell = document.createElement("td");
+            const valore = riga[col] || 'N/A';
 
-            // Pulsanti azione per Libri
-            if (idTabella === 'tabellaLibro') {
-                const azioniCell = document.createElement("td");
-                const btnDettagli = document.createElement("button");
-                btnDettagli.textContent = "Dettagli";
-                btnDettagli.className = "btn-azione btn-view";
-                btnDettagli.onclick = () => mostraDettaglioLibro(riga);
-                azioniCell.appendChild(btnDettagli);
-                row.appendChild(azioniCell);
+            if (col === 'titolo' || col === 'nome') {
+                const link = document.createElement("a");
+                link.href = "#";
+                link.textContent = valore;
+                link.onclick = (e) => {
+                    e.preventDefault();
+                    if (idTabella === 'tabellaLibro') {
+                        mostraDettaglioLibro(riga);
+                    } else if (idTabella === 'tabellaRegione') {
+                        mostraDettaglioRegione(riga);
+                    } else if (idTabella === 'tabellaRicetta') {
+                        mostraDettaglioRicetta(riga);
+                    }
+                };
+                cell.appendChild(link);
+            } else {
+                cell.textContent = valore;
             }
 
-            // Pulsanti azione per Regioni
-            if (idTabella === 'tabellaRegione') {
-                const azioniCell = document.createElement("td");
-                const btnDettagli = document.createElement("button");
-                btnDettagli.textContent = "Dettagli";
-                btnDettagli.className = "btn-azione btn-view";
-                btnDettagli.onclick = () => mostraDettaglioRegione(riga);
-                azioniCell.appendChild(btnDettagli);
-                row.appendChild(azioniCell);
-            }
+            row.appendChild(cell);
+        });
+
+        // Colonna Azioni
+        const azioniCell = document.createElement("td");
+        const btnDettagli = document.createElement("button");
+        btnDettagli.textContent = "Dettagli";
+        btnDettagli.className = "btn-azione btn-view";
+
+        if (idTabella === 'tabellaLibro') {
+            btnDettagli.onclick = () => mostraDettaglioLibro(riga);
+        } else if (idTabella === 'tabellaRegione') {
+            btnDettagli.onclick = () => mostraDettaglioRegione(riga);
+        } else if (idTabella === 'tabellaRicetta') {
+            btnDettagli.onclick = () => mostraDettaglioRicetta(riga);
         }
-        
+
+        azioniCell.appendChild(btnDettagli);
+        row.appendChild(azioniCell);
+
         tbody.appendChild(row);
     });
+
     tabella.appendChild(tbody);
     tabella.style.display = "table";
 }
+
+
 
 function caricaTabellaRegione() {
     if (regioniData.length === 0) {
@@ -231,11 +208,17 @@ function caricaTabellaRicetta() {
             .then(res => res.json())
             .then(data => {
                 ricetteData = data;
-                mostraTabella(data, ['titolo', 'tipo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+                mostraTabella( data, ['numero', 'titolo', 'tipo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta', ['numero', 'regioni', 'numeroLibri', 'titoliLibri'] // colonne da nascondere
+);
             })
             .catch(err => console.error("Errore caricamento Ricette:", err));
     } else {
-        mostraTabella(ricetteData, ['titolo', 'tipo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+        mostraTabella(
+    ricetteData,
+    ['numero', 'titolo', 'tipo', 'regioni', 'numeroLibri', 'titoliLibri'],
+    'tabellaRicetta',
+    ['numero', 'regioni', 'numeroLibri', 'titoliLibri'] // colonne da nascondere
+);
     }
 }
 
@@ -922,4 +905,40 @@ function cercaEVisualizzaLibroPerTitolo(titoloLibro) {
             })
             .catch(err => console.error('Errore ricerca libro:', err));
     }
+}
+
+function ordinaTabellaDinamica(tabellaId, colIndex, tipo) {
+    const tabella = document.getElementById(tabellaId);
+    const tbody = tabella.querySelector("tbody");
+    const righe = Array.from(tbody.rows);
+
+    const chiaveSort = `${tabellaId}_${colIndex}`;
+    sortDirection[chiaveSort] = !sortDirection[chiaveSort]; // toggle
+
+    righe.sort((a, b) => {
+        let valA = a.cells[colIndex].textContent.trim();
+        let valB = b.cells[colIndex].textContent.trim();
+
+        // Parsing per numeri
+        if (tipo === "numero") {
+            valA = parseFloat(valA) || 0;
+            valB = parseFloat(valB) || 0;
+        } else {
+            valA = valA.toLowerCase();
+            valB = valB.toLowerCase();
+        }
+
+        if (valA < valB) return sortDirection[chiaveSort] ? -1 : 1;
+        if (valA > valB) return sortDirection[chiaveSort] ? 1 : -1;
+        return 0;
+    });
+
+    righe.forEach(r => tbody.appendChild(r));
+
+    // Aggiorna le icone
+    const ths = tabella.querySelectorAll("th");
+    ths.forEach((th, i) => {
+        const span = th.querySelector("span.sort-icon");
+        if (span) span.textContent = (i === colIndex) ? (sortDirection[chiaveSort] ? " ▲" : " ▼") : "";
+    });
 }
