@@ -442,7 +442,7 @@ function salvaModificheLibro(e) {
             if (libroIndex !== -1) {
                 libriData[libroIndex].titolo = titolo;
                 libriData[libroIndex].anno = anno;
-                mostraTabella(libriData, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+                mostraTabella(libriData, ['codISBN', 'titolo', 'anno'/*, 'numeroPagine', 'numeroRicette'*/], 'tabellaLibro');
             }
             document.getElementById('modaleModificaLibro').style.display = 'none';
             mostraNotifica('Modifiche salvate con successo!');
