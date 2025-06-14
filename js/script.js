@@ -315,7 +315,7 @@ function filtraRegioni() {
     const regioniFiltrate = regioniData.filter(regione => 
         regione.nome.toLowerCase().includes(filtro)
     );
-    mostraTabella(regioniFiltrate, ['cod', 'nome'], 'tabellaRegione');
+    mostraTabella(regioniFiltrate, ['nome'], 'tabellaRegione');
 }
 
 function filtraRicette() {
@@ -334,7 +334,7 @@ function filtraRicette() {
                (libroSelezionato === '' || ricetta.titoliLibri?.toLowerCase().includes(libroSelezionato.toLowerCase()));
     });
 
-    mostraTabella(ricetteFiltrate, ['numero', 'tipo', 'titolo', 'regioni', 'numeroLibri', 'titoliLibri'], 'tabellaRicetta');
+    mostraTabella(ricetteFiltrate, ['titolo','tipo'], 'tabellaRicetta');
 }
 
 function filtraLibri() {
@@ -355,7 +355,7 @@ function filtraLibri() {
                libro.numeroRicette >= minRicette && libro.numeroRicette <= maxRicette;
     });
 
-    mostraTabella(libriFiltrati, ['codISBN', 'titolo', 'anno', 'numeroPagine', 'numeroRicette'], 'tabellaLibro');
+    mostraTabella(libriFiltrati, ['codISBN', 'titolo', 'anno'], 'tabellaLibro');
 }
 
 // Funzioni di supporto
