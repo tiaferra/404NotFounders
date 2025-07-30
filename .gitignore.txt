@@ -1,0 +1,13 @@
+# Python virtual environment
+myenv/
+venv/
+*.venv/
+
+# Django files
+*.sqlite3
+.DS_Store # macOS specific
+__pycache__/
+*.pyc
+*/migrations/__pycache__/
+media/ # Se avrete file media caricati dagli utenti
+static_cdn/ # Se gestirete i file statici in modo separato
