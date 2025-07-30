@@ -1,0 +1,64 @@
+{# ricettario/templates/ricettario/dettaglio_ricetta.html #}
+{% extends 'ricettario/base.html' %} {# Estende il template base #}
+
+{% block title %}{{ ricetta.titolo }}{% endblock %} {# Definisce il titolo specifico #}
+
+{% block content %} {# Inizia il blocco del contenuto principale #}
+    <a href="{% url 'ricettario:lista_ricette' %}" class="btn btn-secondary btn-sm mb-3">Torna all'elenco ricette</a> {# Bottone Bootstrap #}
+
+    <h1 class="mb-3">{{ ricetta.titolo }}</h1>
+    <p><strong>Tipo:</strong> <span class="badge bg-info text-dark">{{ ricetta.get_tipo_display }}</span></p>
+    {% if ricetta.tempo_preparazione %}
+        <p><strong>Tempo di preparazione:</strong> {{ ricetta.tempo_preparazione }} minuti</p>
+    {% endif %}
+    {% if ricetta.difficolta %}
+        <p><strong>Difficoltà:</strong> {{ ricetta.difficolta }}</p>
+    {% endif %}
+    {% if ricetta.voto_medio %}
+        <p><strong>Voto Medio:</strong> <span class="badge bg-primary">{{ ricetta.voto_medio }}</span></p>
+    {% endif %}
+
+    <h2 class="mt-4">Preparazione</h2>
+    <div class="card card-body bg-light mb-4">
+        {% if ricetta.preparazione %}
+            <p class="card-text">{{ ricetta.preparazione|linebreaksbr }}</p>
+        {% else %}
+            <p class="card-text">Preparazione non disponibile.</p>
+        {% endif %}
+    </div>
+
+    <h2 class="mt-4">Ingredienti</h2>
+    {% if ingredienti %}
+        <ul class="list-group mb-4">
+            {% for ingrediente in ingredienti %}
+                <li class="list-group-item">{{ ingrediente.quantita }} {{ ingrediente.ingrediente }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessun ingrediente elencato.</p>
+    {% endif %}
+
+    <h2 class="mt-4">Regioni Tipiche</h2>
+    {% if regioni %}
+        <ul class="list-group list-group-horizontal flex-wrap mb-4"> {# Lista orizzontale per badge #}
+            {% for regione in regioni %}
+                <li class="list-group-item border-0 p-1 me-2"><span class="badge bg-success">{{ regione.nome }}</span></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nessuna regione tipica specificata.</p>
+    {% endif %}
+
+    <h2 class="mt-4">Pubblicato in Libri</h2>
+    {% if pubblicazioni %}
+        <div class="list-group mb-4">
+            {% for pub in pubblicazioni %}
+                <a href="#" class="list-group-item list-group-item-action"> {# Potremmo rendere questi link cliccabili in futuro #}
+                    Libro: <span class="fw-bold">{{ pub.pagina.libro.titolo }}</span> (ISBN: {{ pub.pagina.libro.codice_isbn }}) - Pagina: {{ pub.pagina.numero_pagina }}
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Questa ricetta non è pubblicata in nessun libro.</p>
+    {% endif %}
+{% endblock content %} {# Chiude il blocco del contenuto principale #}

@@ -1,0 +1,23 @@
+{# ricettario/templates/ricettario/lista_ricette.html #}
+{% extends 'ricettario/base.html' %} {# Estende il template base #}
+
+{% block title %}Lista Ricette{% endblock %} {# Definisce il titolo specifico per questa pagina #}
+
+{% block content %} {# Inizia il blocco del contenuto principale #}
+    <h1 class="mb-4">Tutte le Ricette</h1> {# Classe Bootstrap per margine inferiore #}
+    <ul class="list-group"> {# Classe Bootstrap per liste #}
+        {% for ricetta in ricette %}
+            <li class="list-group-item"> {# Classe Bootstrap per elementi della lista #}
+                <a href="{% url 'ricettario:dettaglio_ricetta' ricetta.numero %}" class="fw-bold">{{ ricetta.titolo }}</a> 
+                ({{ ricetta.get_tipo_display }}) 
+                {% if ricetta.voto_medio %}
+                    - Voto: <span class="badge bg-primary">{{ ricetta.voto_medio }}</span> {# Badge Bootstrap per il voto #}
+                {% else %}
+                    - Voto: N/A
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="list-group-item">Nessuna ricetta trovata.</li>
+        {% endfor %}
+    </ul>
+{% endblock content %} {# Chiude il blocco del contenuto principale #}
